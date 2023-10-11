@@ -81,3 +81,88 @@ export class Tone {
 let tone = new Tone('1')
 
 console.log(tone.findKeyIndex('#5'))
+
+class ChordName {
+  private toneUtil: Tone
+  constructor(chordTone: string[]) {
+    this.toneUtil = new Tone()
+  }
+
+  private getToneSpace(tonePre: string, toneNext: string): number {
+    let toneSpace = this.toneUtil.findKeyIndex(toneNext) - this.toneUtil.findKeyIndex(tonePre)
+
+    return (toneSpace = toneSpace < 0 ? toneSpace + 12 : toneSpace)
+  }
+
+  // 大三度
+  private isMajorThird(tonePre: string, toneNext: string): boolean {
+    return this.getToneSpace(tonePre, toneNext) === 4
+  }
+  // 小三度
+  private isMinorThird(tonePre: string, toneNext: string): boolean {
+    return this.getToneSpace(tonePre, toneNext) === 3
+  }
+  // 增三度
+  private isMajorMajorThird(tonePre: string, toneNext: string): boolean {
+    return this.getToneSpace(tonePre, toneNext) === 5
+  }
+  // 减三度
+  private isMinorMinorThird(tonePre: string, toneNext: string): boolean {
+    return this.getToneSpace(tonePre, toneNext) === 2
+  }
+  // 大三和弦 = 大三度 + 小三度
+  private isMajorChord(chordTone: string[]): boolean {
+    return this.isMajorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
+  }
+  // 小三和弦 = 小三度 + 大三度
+  private isMinorChord(chordTone: string[]): boolean {
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMajorThird(chordTone[1], chordTone[2])
+  }
+  // 增三和弦 = 大三度 + 大三度
+  private isAugmentedChord(chordTone: string[]): boolean {
+    return this.isMajorThird(chordTone[0], chordTone[1]) && this.isMajorThird(chordTone[1], chordTone[2])
+  }
+  // 小三和弦 = 小三度 + 小三度
+  private isDiminishedChord(chordTone: string[]): boolean {
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
+  }
+
+  private isSus4(chordTone: string[]): boolean {
+    return this.isMajorMajorThird(chordTone[0], chordTone[1]) && this.isMinorMinorThird(chordTone[1], chordTone[2])
+  }
+
+  private isMajorMinorSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isMajorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  private isMinorMajorSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isMinorChord(chordTone) && this.isMajorThird(chordTone[2], chordTone[3])
+  }
+
+  private isMajorMajorSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isMajorChord(chordTone) && this.isMajorThird(chordTone[2], chordTone[3])
+  }
+
+  private isMinorMinorSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isMinorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  private isDiminishedSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isDiminishedChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  private isHalfDiminishedSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isDiminishedChord(chordTone) && this.isMajorThird(chordTone[2], chordTone[3])
+  }
+
+  private isHalfAugmentedSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isAugmentedChord(chordTone) && this.isMinorMinorThird(chordTone[2], chordTone[3])
+  }
+}
