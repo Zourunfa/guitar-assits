@@ -126,11 +126,11 @@ class ChordName {
   private isDiminishedChord(chordTone: string[]): boolean {
     return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
   }
-
+  // 挂四和弦 =  增三度 +  减三度
   private isSus4(chordTone: string[]): boolean {
     return this.isMajorMajorThird(chordTone[0], chordTone[1]) && this.isMinorMinorThird(chordTone[1], chordTone[2])
   }
-
+  // 大小七和弦/属七和弦 7 / Mm7 =
   private isMajorMinorSeventhChord(chordTone: string[]): boolean {
     if (chordTone.length < 4) return false
     return this.isMajorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
