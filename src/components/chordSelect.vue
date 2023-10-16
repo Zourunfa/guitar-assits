@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { ref, reactive } from 'vue'
+interface NormalObject {
+  [key: string]: any
+}
 
 const keyMap = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
 const state = reactive({
@@ -34,7 +37,7 @@ function isMobile() {
 
 function touchStart(index: number, e: any) {
   let keyBarName = 'keyBar' + (index + 1)
-  let _state = {}
+  let _state: NormalObject = {}
   let clientX = isNumber(e) ? e : e.touches[0].clientX
   _state['keyBarShow' + (index + 1)] = true
   state.selectWidth = document.getElementById('key1')!.clientWidth
@@ -42,24 +45,23 @@ function touchStart(index: number, e: any) {
   state.minLeft = state.selectWidth * 0.1
   state.startX = clientX
   state.keyBarX = state.state[keyBarName]
-  state.setState(_state)
+  state.value = _state
 }
 
-// function touchMove(index: number, e: any) {
-//   let keyBarName = 'keyBar' + (index + 1)
+function touchMove(index: number, e: any) {
+  let keyBarName = 'keyBar' + (index + 1)
 
-//   let x = isNumber(e) ? e : e.touches[0].clientX
-//   let dx = x - startX
-//   let _state = {}
-//   let resultX = (state.keyBarX + dx) * 0.8
-//   _state[keyBarName] = resultX < state.minLeft ? state.minLeft : resultX > state.maxLeft ? this.maxLeft : resultX
-//   let percent = (_state[keyBarName] - this.minLeft) / (this.maxLeft - this.minLeft + 0.01)
-//   let newKey = this.keyMap[Math.floor(percent * this.keyMap.length)]
-//   _state.chordTone = this.state.chordTone.concat()
-//   _state.chordTone[index] = newKey
-
-//   this.setState(_state)
-// }
+  let x = isNumber(e) ? e : e.touches[0].clientX
+  let dx = x - state.startX
+  let _state: NormalObject = {}
+  let resultX = (state.keyBarX + dx) * 0.8
+  _state[keyBarName] = resultX < state.minLeft ? state.minLeft : resultX > state.maxLeft ? state.maxLeft : resultX
+  let percent = (_state[keyBarName] - state.minLeft) / (state.maxLeft - state.minLeft + 0.01)
+  let newKey = state.keyMap[Math.floor(percent * state.keyMap.length)]
+  _state.chordTone = state.state.chordTone.concat()
+  _state.chordTone[index] = newKey
+  state.value = _state
+}
 </script>
 
 <template></template>
