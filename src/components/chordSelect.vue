@@ -23,6 +23,7 @@ const state = reactive({
   keyBarX: 0,
   keyBarName: '',
   selectWidth: '',
+  isMouseDown: true,
 })
 
 function isArray(data: any) {
@@ -61,6 +62,34 @@ function touchMove(index: number, e: any) {
   _state.chordTone = state.state.chordTone.concat()
   _state.chordTone[index] = newKey
   state.value = _state
+}
+
+function touchEnd(index: number, e: any) {
+  let _state: NormalObject = {}
+  _state['keyBarShow' + (index + 1)] = false
+  _state.loading = true
+  state.value = _state
+  // this.props.selectFinish(this.state.chordTone)
+}
+
+function mouseDown(index: number, e: any) {
+  if (isMobile()) return
+  state.isMouseDown = true
+  touchStart(index, e.pageX)
+}
+function mouseUp(index: number, e?: any) {
+  if (state.isMobile()) return
+  state.isMouseDown = false
+  touchEnd(index, _)
+}
+function mouseMove(index: number, e: any) {
+  if (isMobile() || !state.isMouseDown) return
+  touchMove(index, e.pageX)
+}
+function mouseLeave(index: number, e?: any) {
+  if (isMobile() || !state.isMouseDown) return
+  state.isMouseDown = false
+  touchEnd(index)
 }
 </script>
 
