@@ -94,12 +94,12 @@ function mouseLeave(index: number, e?: any) {
 </script>
 
 <template>
-      <div :class="container-chordSelect">
-        <div :class="key-select">
+      <div class="container-chordSelect">
+        <div class="key-select">
       
             <div
             v-for="(key,i) in state.chordTone"
-              :key=${reactkey} + i
+              :key=`${reactkey} + i`
               :id=`${key}+i+1`
               :class="key-num square"
               @onTouchStart=touchStart(i)
