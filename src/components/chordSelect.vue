@@ -94,7 +94,7 @@ function mouseLeave(index: number, e?: any) {
 </script>
 
 <template>
-      <div class="container-chordSelect">
+  <!-- <div class="container-chordSelect">
         <div class="key-select">
       
             <div
@@ -129,5 +129,5 @@ function mouseLeave(index: number, e?: any) {
         <div :class={'loading-box' + (this.state.loading ? ' show' : '')}>
           <img src={loading} alt="" :class="loading" />
         </div>
-      </div>
+      </div> -->
 </template>
