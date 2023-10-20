@@ -93,41 +93,4 @@ function mouseLeave(index: number, e?: any) {
 }
 </script>
 
-<template>
-  <!-- <div class="container-chordSelect">
-        <div class="key-select">
-      
-            <div
-            v-for="(key,i) in state.chordTone"
-              :key=`${reactkey} + i`
-              :id=`${key}+i+1`
-              :class="key-num square"
-              @onTouchStart=touchStart(i)
-              @onTouchMove=touchMove(i)
-              @onTouchEnd=touchEnd(i)
-              @onMouseDown=mouseDown(i)
-              @onMouseUp=mouseUp(i)
-              @nMouseMove=mouseMove(i)
-              @onMouseLeave=mouseLeave(i)
-
-          
-            >
-              <span :class="noselect">{key}</span>
-              <div :class='key-bar' + state['keyBarShow' + flag] ? ' keybar-show' : '')} style={{ left: this.state['keyBar' + flag] + 'px' }}></div>
-            </div>
-    
-      </div>
-        <div :class="select-notify noselect">左右拖动可改变和弦组成音</div>
-        <div :class="chord-count">
-          <div :class={this.state.type === 3 ? 'noselect active' : 'noselect'} onClick={this.chordCountChange.bind(this, 3)}>
-            三音和弦
-          </div>
-          <div :class={this.state.type === 4 ? 'noselect active' : 'noselect'} onClick={this.chordCountChange.bind(this, 4)}>
-            四音和弦
-          </div>
-        </div>
-        <div :class={'loading-box' + (this.state.loading ? ' show' : '')}>
-          <img src={loading} alt="" :class="loading" />
-        </div>
-      </div> -->
-</template>
+<template></template>
