@@ -63,7 +63,6 @@ function isMobile() {
 }
 
 function touchStart(index: number, e: TouchEvent | number) {
-  debugger;
   let keyBarName = "keyBar" + (index + 1);
   let _state: NormalObject = {};
   let clientX = isNumber(e) ? e : e.touches[0].clientX;
@@ -95,14 +94,16 @@ function touchMove(index: number, e: TouchEvent | number) {
   let newKey = keyMap[Math.floor(percent * keyMap.length)];
   _state.chordTone = state.chordTone.concat();
   _state.chordTone[index] = newKey;
-  state.value = _state;
+
+  Object.assign(state, _state);
 }
 
 function touchEnd(index: number) {
   let _state: NormalObject = {};
   _state["keyBarShow" + (index + 1)] = false;
   _state.loading = true;
-  state.value = _state;
+  Object.assign(state, _state);
+  console.log(state, "----state");
   // this.props.selectFinish(this.state.chordTone)
 }
 
