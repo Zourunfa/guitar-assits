@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import loading from "./bars.svg";
+
 interface NormalObject {
   [key: string]: any;
 }
@@ -66,7 +66,7 @@ function isMobile() {
 function touchStart(index: number, e: TouchEvent | number) {
   let keyBarName = "keyBar" + (index + 1);
   let _state: NormalObject = {};
-  let clientX = isNumber(e) ? e : e.touches[0].clientX;
+  let clientX = isNumber(e) ? e : (e as TouchEvent).touches[0].clientX;
   _state["keyBarShow" + (index + 1)] = true;
   state.selectWidth = document.getElementById("key1")!.clientWidth;
   state.maxLeft = state.selectWidth * 0.9 - 20;
@@ -79,8 +79,8 @@ function touchStart(index: number, e: TouchEvent | number) {
 function touchMove(index: number, e: TouchEvent | number) {
   let keyBarName = "keyBar" + (index + 1);
 
-  let x = isNumber(e) ? e : e.touches[0].clientX;
-  let dx = x - state.startX;
+  let x = isNumber(e) ? e : (e as TouchEvent).touches[0].clientX;
+  let dx = (x as number) - state.startX;
   let _state: NormalObject = {};
   let resultX = (state.keyBarX + dx) * 0.8;
   _state[keyBarName] =
@@ -114,7 +114,7 @@ function mouseDown(index: number, e: MouseEvent) {
   state.isMouseDown = true;
   touchStart(index, e.pageX);
 }
-function mouseUp(index: number, e: MouseEvent) {
+function mouseUp(index: number) {
   if (isMobile()) return;
   state.isMouseDown = false;
   touchEnd(index);
@@ -123,7 +123,7 @@ function mouseMove(index: number, e: MouseEvent) {
   if (isMobile() || !state.isMouseDown) return;
   touchMove(index, e.pageX);
 }
-function mouseLeave(index: number, e: MouseEvent) {
+function mouseLeave(index: number) {
   if (isMobile() || !state.isMouseDown) return;
   state.isMouseDown = false;
   touchEnd(index);
@@ -152,9 +152,9 @@ function chordCountChange(count: number) {
         @touchmove="touchMove(i, $event)"
         @touchend="touchEnd(i)"
         @mousedown="mouseDown(i, $event)"
-        @mouseup="mouseUp(i, $event)"
+        @mouseup="mouseUp(i)"
         @mousemove="mouseMove(i, $event)"
-        @mouseleave="mouseLeave(i, $event)"
+        @mouseleave="mouseLeave(i)"
       >
         <span class="noselect">{{ key }}</span>
         <div
