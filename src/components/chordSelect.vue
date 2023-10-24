@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { reactive } from "vue";
+import loading from "./bars.svg";
 interface NormalObject {
   [key: string]: any;
 }
@@ -23,7 +24,7 @@ const keyMap = [
   "b7",
   "7",
 ];
-
+const emits = defineEmits(["drawChord"]);
 interface StateInterface {
   [key: string]: any;
   chordTone: string[];
@@ -50,9 +51,9 @@ const state: StateInterface = reactive({
   isMouseDown: true,
 });
 
-function isArray(data: any) {
-  return Object.prototype.toString.call(data) === "[object Array]";
-}
+// function isArray(data: any) {
+//   return Object.prototype.toString.call(data) === "[object Array]";
+// }
 function isNumber(data: any) {
   return Object.prototype.toString.call(data) === "[object Number]";
 }
@@ -104,7 +105,8 @@ function touchEnd(index: number) {
   _state.loading = true;
   Object.assign(state, _state);
   console.log(state, "----state");
-  // this.props.selectFinish(this.state.chordTone)
+
+  emits("drawChord", state.chordTone);
 }
 
 function mouseDown(index: number, e: MouseEvent) {
@@ -178,9 +180,9 @@ function chordCountChange(count: number) {
         四音和弦
       </div>
     </div>
-    <div class="loading-box" :class="{ show: state.loading }">
+    <!-- <div class="loading-box" :class="[state.loading ? ' show' : '']">
       <img src="loading.gif" alt="" class="loading" />
-    </div>
+    </div> -->
   </div>
 </template>
 

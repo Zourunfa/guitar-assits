@@ -6,7 +6,7 @@ function is(data) {
 }
 
 // 单音类，用于音的映射查询与音高的改变，同时可标记记录其在吉他上的位置
-class Tone {
+export class Tone {
   constructor(toneString = '1', string, fret) {
     this.syllableMap = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si'] // 所有唱名数组
     this.keyMap = ['1', ['#1', 'b2'], '2', ['#2', 'b3'], '3', '4', ['#4', 'b5'], '5', ['#5', 'b6'], '6', ['#6', 'b7'], '7'] // 音程
@@ -78,7 +78,7 @@ class Tone {
 }
 
 // 吉他和弦推导类
-class GuitarChord {
+export class GuitarChord {
   constructor() {
     // 吉他的最大品格数
     this.fretLength = 15
@@ -311,7 +311,7 @@ class GuitarChord {
 }
 
 // 和弦名称推导
-class ChordName {
+export class ChordName {
   constructor(chordTone) {
     // 实例化一个单音类做工具，用来计算音与各种标记的映射关系
     this.toneUtil = new Tone()
@@ -488,7 +488,7 @@ class ChordName {
 }
 
 // 和弦svg绘图
-class ChordSvg {
+export class ChordSvg {
   constructor() {
     this.SVG_NS = 'http://www.w3.org/2000/svg'
     this.XLINK_NS = 'http://www.w3.org/1999/xlink'
@@ -713,12 +713,12 @@ class ChordSvg {
   }
 }
 
-module.exports = {
-  Tone: Tone,
-  GuitarChord: GuitarChord,
-  ChordName: ChordName,
-  ChordSvg: ChordSvg,
-}
+// module.exports = {
+//   Tone: Tone,
+//   GuitarChord: GuitarChord,
+//   ChordName: ChordName,
+//   ChordSvg: ChordSvg,
+// }
 
 // 示例
 // let chord = new GuitarChord();
