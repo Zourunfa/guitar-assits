@@ -130,11 +130,17 @@ function mouseLeave(index: number) {
 }
 
 function chordCountChange(count: number) {
-  state.chordTone.slice(0, count);
+  console.log(count, "---count");
+  console.log(state.chordTone, "---- state.chordTone.slice(0, count);");
+  state.chordTone = state.chordTone.slice(0, count);
   state.type = count;
-
+  console.log(
+    state.chordTone.slice(0, count),
+    "---- state.chordTone.slice(0, count);"
+  );
   if (count === 4 && state.chordTone.length < 4) {
     state.chordTone.concat(["1"]);
+    console.log(state.chordTone.slice(0, count), "----13");
     state.keyBar4 = 0;
   }
 }
