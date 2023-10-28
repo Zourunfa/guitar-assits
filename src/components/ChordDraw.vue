@@ -81,7 +81,9 @@ const randomOne = (arr: string[]): string => {
 };
 
 const draw = (chordTone: string) => {
+  debugger;
   const chord = new GuitarChord();
+  console.log(chord, "----chord1");
   const chordName = new ChordName().getChordName(chordTone);
   const chordResult = chord.chord(chordTone);
   const svg = new ChordSvg();

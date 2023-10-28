@@ -585,6 +585,8 @@ export class ChordSvg {
       y: 20,
     })
     text.innerHTML = name
+
+    console.log(text.innerHTML, '--- text.innerHTML ')
     svg.appendChild(text)
   }
   // 初始化svg
@@ -660,8 +662,11 @@ export class ChordSvg {
    * @param target svg指法图dom容器
    */
   drawChord(chordTone, chord, target) {
+    // debugger
     let svg = this.svg.cloneNode(true)
+
     let fretArr = chord.map(item => item.fret).filter(fret => fret != null)
+    console.log(chord, '---chord')
     // 和弦指法中出现的最高品格位置
     let maxFret = Math.max.apply(null, fretArr)
     // 和弦指法中出现的最低品位位置
