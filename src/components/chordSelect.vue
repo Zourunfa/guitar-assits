@@ -186,7 +186,6 @@ function chordCountChange(count: number) {
   </div>
 </template>
 
-
 <style>
 .container-chordSelect {
   width: 100%;
