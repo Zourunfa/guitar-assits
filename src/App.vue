@@ -1,14 +1,14 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import ChordSelect from "./components/ChordSelect.vue";
-import ChordDraw from "./components/ChordDraw.vue";
-import { ref } from "vue";
+import ChordSelect from './components/ChordSelect.vue'
+import ChordDraw from './components/ChordDraw.vue'
+import { ref } from 'vue'
 
-const chordDraw = ref();
+const chordDraw = ref()
 const handleDrawChord = (chordTone: string[]) => {
-  chordDraw.value.draw(chordTone);
-};
+  chordDraw.value.draw(chordTone)
+}
 </script>
 
 <template>
@@ -18,7 +18,7 @@ const handleDrawChord = (chordTone: string[]) => {
   </div>
 </template>
 
-<style >
+<style>
 .container {
   text-align: center;
 }
