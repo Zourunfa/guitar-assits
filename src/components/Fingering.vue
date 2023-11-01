@@ -77,8 +77,20 @@ export default {
     svg.setAttribute('width', '1500')
     svg.setAttribute('height', '300')
 
+    // 创建14根竖线
+    for (let i = 2; i < 15; i++) {
+      let line = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+      line.setAttribute('x1', i * 100)
+      line.setAttribute('y1', 0)
+      line.setAttribute('x2', i * 100)
+      line.setAttribute('y2', 300)
+      line.setAttribute('stroke', 'black')
+      line.setAttribute('stroke-width', '4')
+      svg.appendChild(line)
+    }
+
     // 创建6根横琴弦
-    for (let i = 0; i < 1; i++) {
+    for (let i = 0; i < 6; i++) {
       // 计算当前琴弦的Y坐标
       const y = i * 50 + 25
 
@@ -92,23 +104,25 @@ export default {
         fret.setAttribute('x1', x)
         fret.setAttribute('y1', y)
         fret.setAttribute('x2', x + 100)
-        fret.setAttribute('y2', y + 30) // 略微增加长度以便 hover 效果
+        fret.setAttribute('y2', y) // 略微增加长度以便 hover 效果
         fret.setAttribute('stroke', 'black')
-
+        fret.setAttribute('stroke-width', '4')
         // 添加 hover 效果到品格
         fret.addEventListener('mouseenter', () => {
-          fret.setAttribute('stroke', 'gray') // 鼠标悬停时改变颜色
+          fret.setAttribute('stroke', 'yellowgreen') // 鼠标悬停时改变颜色
+          fret.setAttribute('stroke-width', '6')
         })
 
         fret.addEventListener('mouseleave', () => {
           fret.setAttribute('stroke', 'black') // 鼠标离开时恢复颜色
+          fret.setAttribute('stroke-width', '4')
         })
 
         // 添加点击事件来生成黑点和音名
         fret.addEventListener('click', () => {
           const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-          marker.setAttribute('cx', x)
-          marker.setAttribute('cy', y + 5) // 使圆点位于中央
+          marker.setAttribute('cx', x + 50)
+          marker.setAttribute('cy', y) // 使圆点位于中央
           marker.setAttribute('r', 5)
           marker.setAttribute('fill', 'black')
           svg.appendChild(marker)
@@ -117,7 +131,7 @@ export default {
           const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
           noteText.setAttribute('x', x)
           noteText.setAttribute('y', y + 20) // 适当调整位置以避免重叠
-          noteText.setAttribute('text-anchor', 'middle')
+          noteText.setAttribute('text-anchor', 'red')
           noteText.textContent = `音名${i * 15 + j + 1}` // 请替换为实际的音名
           svg.appendChild(noteText)
         })
