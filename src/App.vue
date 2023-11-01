@@ -3,6 +3,7 @@
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import ChordSelect from "./components/ChordSelect.vue";
 import ChordDraw from "./components/ChordDraw.vue";
+import Fingering from "./components/Fingering.vue";
 import { ref } from "vue";
 
 const chordDraw = ref();
@@ -13,6 +14,7 @@ const handleDrawChord = (chordTone: string[]) => {
 
 <template>
   <div class="container">
+    <Fingering></Fingering>
     <ChordSelect ref="chordSelect" @draw-chord="handleDrawChord"></ChordSelect>
     <ChordDraw ref="chordDraw" />
   </div>

@@ -1,0 +1,29 @@
+<svg class="finger-panel" width="1500" height="300" xmlns="http://www.w3.org/2000/svg">
+  <!-- 6根琴弦 -->
+  <line x1="0" y1="25" x2="1500" y2="25" stroke="black" id="string1" data-note="E"/>
+  <line x1="0" y1="75" x2="1500" y2="75" stroke="black" id="string2" data-note="A"/>
+  <line x1="0" y1="125" x2="1500" y2="125" stroke="black" id="string3" data-note="D"/>
+  <line x1="0" y1="175" x2="1500" y2="175" stroke="black" id="string4" data-note="G"/>
+  <line x1="0" y1="225" x2="1500" y2="225" stroke="black" id="string5" data-note="B"/>
+  <line x1="0" y1="275" x2="1500" y2="275" stroke="black" id="string6" data-note="E"/>
+
+  <!-- 15个品格 -->
+  <!-- 注意：我们把品格的宽度设置得较小以便它们看起来像品格 -->
+  <rect x="100" y="0" width="5" height="300" fill="black" id="fret1"/>
+  <rect x="200" y="0" width="5" height="300" fill="black" id="fret2"/>
+  <rect x="300" y="0" width="5" height="300" fill="black" id="fret3"/>
+  <rect x="400" y="0" width="5" height="300" fill="black" id="fret4"/>
+  <rect x="500" y="0" width="5" height="300" fill="black" id="fret5"/>
+  <rect x="600" y="0" width="5" height="300" fill="black" id="fret6"/>
+  <rect x="700" y="0" width="5" height="300" fill="black" id="fret7"/>
+  <rect x="800" y="0" width="5" height="300" fill="black" id="fret8"/>
+  <rect x="900" y="0" width="5" height="300" fill="black" id="fret9"/>
+  <rect x="1000" y="0" width="5" height="300" fill="black" id="fret10"/>
+  <rect x="1100" y="0" width="5" height="300" fill="black" id="fret11"/>
+  <rect x="1200" y="0" width="5" height="300" fill="black" id="fret12"/>
+  <rect x="1300" y="0" width="5" height="300" fill="black" id="fret13"/>
+  <rect x="1400" y="0" width="5" height="300" fill="black" id="fret14"/>
+  <rect x="1500" y="0" width="5" height="300" fill="black" id="fret15"/>
+</svg>
+
+
