@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div v-if="chordNotes.length >= 3">
+    <!-- <div v-if="chordNotes.length >= 3">
       <button @click="generateChord">Generate Chord</button>
     </div>
     <div v-if="chordNotes.length === 3">Chord Notes: {{ chordNotes.join(', ') }}</div>
     <div v-else>
       <p>Click on three different positions to generate a chord.</p>
-    </div>
+    </div> -->
   </div>
 </template>
 
