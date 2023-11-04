@@ -1,13 +1,9 @@
 import { createApp } from 'vue'
 import './styles.css'
 import App from './App.vue'
-// import { Tone } from './utils/tone'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
+const app = createApp(App)
 
-// debugger
-// let tone = new Tone('1')
-
-// console.log(tone.findKeyIndex('#5'))
-// console.log(tone.findKeyIndex('2'))
-
-// console.log(tone.step(5))
-createApp(App).mount('#app')
+app.use(ElementPlus)
+app.mount('#app')

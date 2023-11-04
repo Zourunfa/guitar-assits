@@ -1,20 +1,30 @@
 <script setup lang="ts">
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import ChordSelect from './components/ChordSelect.vue'
-import ChordDraw from './components/ChordDraw.vue'
-import { ref } from 'vue'
+import ChordSelect from "./components/ChordSelect.vue";
+import ChordDraw from "./components/ChordDraw.vue";
+import { ref } from "vue";
 
 const chordDraw = ref()
 const handleDrawChord = (chordTone: string[]) => {
   chordDraw.value.draw(chordTone)
 }
+
+const activeName = ref('1')
+
 </script>
 
 <template>
   <div class="container">
-    <ChordSelect ref="chordSelect" @draw-chord="handleDrawChord"></ChordSelect>
-    <ChordDraw ref="chordDraw" />
+    <el-tabs v-model="activeName" class="demo-tabs">
+      <el-tab-pane label="指法推导和弦名" name="1">
+        <Fingering></Fingering>
+      </el-tab-pane>
+      <el-tab-pane label="音名和弦推导指法" name="2">
+        <ChordSelect ref="chordSelect" @draw-chord="handleDrawChord"></ChordSelect>
+        <ChordDraw ref="chordDraw" />
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
