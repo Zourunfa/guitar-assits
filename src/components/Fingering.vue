@@ -1,9 +1,9 @@
 <template>
-  <div>
-    {{ this.chordNotes }}
+  <div class="figering-container">
+    <p>现有六根弦各自音名： {{ chordNotes }}</p>
 
     <p>{{ chordTone }}</p>
-    <p>{{ chordName }}</p>
+    <p class="chord-name">当前和弦名：{{ chordName }}</p>
   </div>
 </template>
 
@@ -175,5 +175,9 @@ export default {
 .fret:hover {
   fill: red; /* 悬停状态时的样式，例如将颜色更改为红色 */
   /* 其他悬停状态时的样式属性 */
+}
+
+.chord-name {
+  font-size: 30px;
 }
 </style>
