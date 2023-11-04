@@ -3,6 +3,8 @@
     <p>现有六根弦各自音名： {{ chordNotes }}</p>
 
     <p>{{ chordTone }}</p>
+
+    <el-button @click="generateChordName" type="primary">生成和弦名</el-button>
     <p class="chord-name">当前和弦名：{{ chordName }}</p>
   </div>
 </template>
@@ -38,6 +40,37 @@ export default {
     }
   },
   methods: {
+    getIntervalSemitones(note1, note2) {
+      const notesOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+      const index1 = notesOrder.indexOf(note1)
+      const index2 = notesOrder.indexOf(note2)
+      return (index2 - index1 + 12) % 12
+    },
+    // 自定义比较函数
+    compareNotes(a, b) {
+      // 提取音符的英文部分
+      const noteA = a.match(/[A-Ga-g#b]+/)[0]
+      const noteB = b.match(/[A-Ga-g#b]+/)[0]
+
+      // 提取音符的数字部分
+      const numA = parseInt(a.match(/\d+/)[0])
+      const numB = parseInt(b.match(/\d+/)[0])
+
+      // 定义英文音符顺序
+      const noteOrder = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
+
+      // 比较数字部分
+      if (numA !== numB) {
+        return numA - numB
+      }
+
+      // 比较英文部分
+      return noteOrder.indexOf(noteA) - noteOrder.indexOf(noteB)
+    },
+    customSort(notes) {
+      // 使用自定义比较函数进行排序
+      return notes.sort(this.compareNotes)
+    },
     getDistinctNotes(notes) {
       const noteSet = new Set()
 
@@ -53,11 +86,9 @@ export default {
     },
     distinctNotesWithNames(notes) {
       const distinctNotes = this.getDistinctNotes(notes)
-
+      console.log(distinctNotes, '---distinctNotes')
       return distinctNotes.map(note => {
         const index = this.keyMapEn.findIndex(name => note == name)
-        console.log(index, '--index')
-        console.log(this.keyMap[index], '---this.keyMap[index]')
         return this.keyMap[index]
       })
     },
@@ -73,11 +104,14 @@ export default {
       marker.style.top = y + 'px'
       document.body.appendChild(marker)
     },
-    generateChordName(chordTone) {
+    generateChordName() {
       const chord = new GuitarChord()
-      console.log(chord, '----chord1')
-      console.log(chordTone, '----chordTone')
-      this.chordName = new ChordName().getChordName(chordTone)
+
+      this.chordTone = this.customSort(this.chordNotes)
+      console.log(this.chordTone, '---this.chordTone =1')
+      this.chordTone = this.distinctNotesWithNames(this.chordTone)
+      console.log(this.chordTone, '---this.chordTone =2')
+      this.chordName = new ChordName().getChordName(this.chordTone)
     },
   },
   mounted() {
@@ -141,15 +175,14 @@ export default {
 
           this.currentNote = fret.getAttribute('data-set-musicId')
           this.chordNotes[i] = this.currentNote
-          this.chordTone = this.distinctNotesWithNames(this.chordNotes)
-          this.generateChordName(this.chordTone.sort())
+
           console.log(this.chordTone, '--this.chordTone')
           // 添加音名
           const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
           noteText.setAttribute('x', x)
           noteText.setAttribute('y', y + 20) // 适当调整位置以避免重叠
           noteText.setAttribute('text-anchor', 'red')
-          noteText.textContent = `音名${i * 15 + j + 1}` // 请替换为实际的音名
+          noteText.textContent = `音名${this.currentNote}` // 请替换为实际的音名
           svg.appendChild(noteText)
         })
 
