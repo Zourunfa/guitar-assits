@@ -1,17 +1,14 @@
 <template>
   <div>
-    <!-- <div v-if="chordNotes.length >= 3">
-      <button @click="generateChord">Generate Chord</button>
-    </div>
-    <div v-if="chordNotes.length === 3">Chord Notes: {{ chordNotes.join(', ') }}</div>
-    <div v-else>
-      <p>Click on three different positions to generate a chord.</p>
-    </div> -->
+    {{ this.chordNotes }}
+
+    <p>{{ chordTone }}</p>
+    <p>{{ chordName }}</p>
   </div>
 </template>
 
 <script>
-// import { Guitar as GuitarSvg } from "../assets/fingerPanel.svg?component";
+import { GuitarChord, ChordName, ChordSvg } from '../utils/tone.js'
 
 export default {
   components: {
@@ -23,36 +20,48 @@ export default {
       pressedFret: null,
       pressedString: null,
       pressedNote: null,
-      chordNotes: [],
+      chordNotes: ['E4', 'B3', 'G3', 'D3', 'A2', 'E2'],
+      currentNote: '',
+      chordTone: null,
+      chordName: '',
+      keyMap: ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7'],
+      keyMapEn: ['C', '#C', 'bD', 'D', '#E', 'bE', 'E', 'F', '#F', 'bG', 'G', '#G', 'bA', 'A', '#A', 'bB', 'B'],
+      // 创建一个二维数组表示吉他琴弦和品格上的音名
+      guitarNotes: [
+        ['E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5'],
+        ['B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5'],
+        ['G3', 'G#3', 'A3', 'A#3', 'B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4'],
+        ['D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4'],
+        ['A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3', 'C4'],
+        ['E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3'],
+      ],
     }
   },
   methods: {
-    handleClick(event) {
-      let x = event.clientX - event.target.getBoundingClientRect().left
-      let y = event.clientY - event.target.getBoundingClientRect().top
+    getDistinctNotes(notes) {
+      const noteSet = new Set()
 
-      let stringIndex = Math.floor(y / 50)
-      let fret = Math.floor(x / 200)
+      notes.forEach(note => {
+        // 提取音符的字母部分
+        const noteName = note.match(/[A-Ga-g#b]/)[0]
+        if (!noteSet.has(noteName)) {
+          noteSet.add(noteName)
+        }
+      })
 
-      if (stringIndex >= 0 && stringIndex < 6) {
-        this.pressedFret = fret
-        this.pressedString = stringIndex
-        this.calculateNote()
-
-        // 在按下位置添加标记
-        this.addMarker(x, y)
-      }
+      return Array.from(noteSet)
     },
-    calculateNote() {
-      let baseNote = this.strings[this.pressedString]
-      let newNoteIndex = this.strings.indexOf(baseNote) + this.pressedFret
-      this.pressedNote = this.strings[newNoteIndex % 6]
+    distinctNotesWithNames(notes) {
+      const distinctNotes = this.getDistinctNotes(notes)
 
-      // 检查是否已经存在于和弦音符列表，避免重复
-      if (!this.chordNotes.includes(this.pressedNote)) {
-        this.chordNotes.push(this.pressedNote)
-      }
+      return distinctNotes.map(note => {
+        const index = this.keyMapEn.findIndex(name => note == name)
+        console.log(index, '--index')
+        console.log(this.keyMap[index], '---this.keyMap[index]')
+        return this.keyMap[index]
+      })
     },
+
     addMarker(x, y) {
       // 在点击位置添加一个10px黑色圆点
       let marker = document.createElement('div')
@@ -64,10 +73,11 @@ export default {
       marker.style.top = y + 'px'
       document.body.appendChild(marker)
     },
-    generateChord() {
-      // 生成和弦的逻辑在这里，根据 this.chordNotes 数组中的音符
-      // 可以添加代码来确定和弦类型，显示和弦图表等
-      console.log('Generating chord with notes:', this.chordNotes)
+    generateChordName(chordTone) {
+      const chord = new GuitarChord()
+      console.log(chord, '----chord1')
+      console.log(chordTone, '----chordTone')
+      this.chordName = new ChordName().getChordName(chordTone)
     },
   },
   mounted() {
@@ -107,6 +117,7 @@ export default {
         fret.setAttribute('y2', y) // 略微增加长度以便 hover 效果
         fret.setAttribute('stroke', 'black')
         fret.setAttribute('stroke-width', '4')
+        fret.setAttribute('data-set-musicId', this.guitarNotes[i][j + 1])
         // 添加 hover 效果到品格
         fret.addEventListener('mouseenter', () => {
           fret.setAttribute('stroke', 'yellowgreen') // 鼠标悬停时改变颜色
@@ -125,8 +136,14 @@ export default {
           marker.setAttribute('cy', y) // 使圆点位于中央
           marker.setAttribute('r', 5)
           marker.setAttribute('fill', 'black')
+
           svg.appendChild(marker)
 
+          this.currentNote = fret.getAttribute('data-set-musicId')
+          this.chordNotes[i] = this.currentNote
+          this.chordTone = this.distinctNotesWithNames(this.chordNotes)
+          this.generateChordName(this.chordTone.sort())
+          console.log(this.chordTone, '--this.chordTone')
           // 添加音名
           const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
           noteText.setAttribute('x', x)
