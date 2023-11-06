@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { ChordName } from '../utils/tone.js'
 
 const chordNotes = ref(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
@@ -73,8 +73,6 @@ const generateChordName = () => {
   chordTone.value = distinctNotesWithNames(chordTone.value)
   chordName.value = new ChordName().getChordName(chordTone.value)
 }
-
-createFingerSvg()
 function createFingerSvg() {
   // 创建一个SVG元素
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
@@ -151,8 +149,11 @@ function createFingerSvg() {
   }
 
   // 将SVG添加到页面中
-  document.body.appendChild(svg)
+  document.querySelector('.figering-container').appendChild(svg)
 }
+onMounted(() => {
+  createFingerSvg()
+})
 </script>
 
 <style>
