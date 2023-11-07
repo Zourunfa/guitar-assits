@@ -6,6 +6,7 @@
 
     <el-button @click="generateChordName" type="primary">生成和弦名</el-button>
     <p class="chord-name">当前和弦名：{{ chordName }}</p>
+    <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
   </div>
 </template>
 
@@ -19,7 +20,8 @@ const chordTone = ref(null)
 const chordName = ref('')
 const keyMap = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
 const keyMapEn = ['C', '#C', 'bD', 'D', '#E', 'bE', 'E', 'F', '#F', 'bG', 'G', '#G', 'bA', 'A', '#A', 'bB', 'B']
-
+const chordToneList = ref([])
+const chordNameList = ref([])
 const guitarNotes = [
   ['E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5'],
   ['B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5'],
@@ -46,6 +48,28 @@ const compareNotes = (a, b) => {
 const customSort = notes => {
   return notes.sort(compareNotes)
 }
+// 全排列
+const permute = arr => {
+  const result = []
+
+  function generatePermutations(currentArr, remainingArr) {
+    if (remainingArr.length === 0) {
+      result.push(currentArr.slice()) // 添加当前排列到结果数组
+      return
+    }
+
+    for (let i = 0; i < remainingArr.length; i++) {
+      const nextElement = remainingArr[i]
+      currentArr.push(nextElement)
+      const remaining = remainingArr.slice(0, i).concat(remainingArr.slice(i + 1))
+      generatePermutations(currentArr, remaining)
+      currentArr.pop() // 回溯，移除添加的元素
+    }
+  }
+
+  generatePermutations([], arr)
+  return result
+}
 
 const getDistinctNotes = notes => {
   const noteSet = new Set()
@@ -71,6 +95,13 @@ const distinctNotesWithNames = notes => {
 const generateChordName = () => {
   chordTone.value = customSort(chordNotes.value)
   chordTone.value = distinctNotesWithNames(chordTone.value)
+
+  chordToneList.value = permute(chordTone.value)
+  console.log(chordToneList.value, '----chordToneList.value')
+
+  chordNameList.value = chordToneList.value.map(notes => {
+    return new ChordName().getChordName(notes)
+  })
   chordName.value = new ChordName().getChordName(chordTone.value)
 }
 function createFingerSvg() {
