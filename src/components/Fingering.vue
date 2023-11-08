@@ -104,6 +104,17 @@ const generateChordName = () => {
   })
   chordName.value = new ChordName().getChordName(chordTone.value)
 }
+
+const clearNoteCircle = currentLine => {
+  console.log(currentLine)
+  const circle = document.querySelectorAll(`.line${currentLine}`)
+  console.log(circle)
+  if (circle) {
+    for (let i = 0; i < circle.length; i++) {
+      circle[i].parentNode.removeChild(circle[i])
+    }
+  }
+}
 function createFingerSvg() {
   // 创建一个SVG元素
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
@@ -142,6 +153,7 @@ function createFingerSvg() {
       fret.setAttribute('stroke', 'black')
       fret.setAttribute('stroke-width', '4')
       fret.setAttribute('data-set-musicId', guitarNotes[i][j + 1])
+
       // 添加 hover 效果到品格
       fret.addEventListener('mouseenter', () => {
         fret.setAttribute('stroke', 'yellowgreen') // 鼠标悬停时改变颜色
@@ -155,14 +167,16 @@ function createFingerSvg() {
 
       // 添加点击事件来生成黑点和音名
       fret.addEventListener('click', () => {
+        // 先清除一条琴弦上的手指点和音名
+        clearNoteCircle(i)
+
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         marker.setAttribute('cx', (x + 50).toString())
         marker.setAttribute('cy', y.toString()) // 使圆点位于中央
         marker.setAttribute('r', '5')
         marker.setAttribute('fill', 'black')
-
+        marker.setAttribute('class', `line${i}`)
         svg.appendChild(marker)
-
         currentNote.value = fret.getAttribute('data-set-musicId')
         chordNotes.value[i] = currentNote.value
 
@@ -170,6 +184,7 @@ function createFingerSvg() {
         const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         noteText.setAttribute('x', x.toString())
         noteText.setAttribute('y', (y + 20).toString()) // 适当调整位置以避免重叠
+        noteText.setAttribute('class', `line${i}`)
         noteText.setAttribute('text-anchor', 'red')
         noteText.textContent = `音名${currentNote.value}` // 请替换为实际的音名
         svg.appendChild(noteText)
