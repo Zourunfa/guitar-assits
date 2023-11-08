@@ -188,6 +188,10 @@ onMounted(() => {
 </script>
 
 <style>
+.el-tabs__nav-scroll {
+  display: flex;
+  justify-content: center;
+}
 #fret {
   /* 品格的默认样式 */
   fill: black;
