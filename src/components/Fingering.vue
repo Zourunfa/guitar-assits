@@ -19,7 +19,7 @@ const currentNote = ref('')
 const chordTone = ref(null)
 const chordName = ref('')
 const keyMap = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
-const keyMapEn = ['C', '#C', 'bD', 'D', '#E', 'bE', 'E', 'F', '#F', 'bG', 'G', '#G', 'bA', 'A', '#A', 'bB', 'B']
+const keyMapEn = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
 const chordToneList = ref([])
 const chordNameList = ref([])
 const guitarNotes = [
@@ -75,7 +75,9 @@ const getDistinctNotes = notes => {
   const noteSet = new Set()
 
   notes.forEach(note => {
-    const noteName = note.match(/[A-Ga-g#b]/)[0]
+    console.log(note, '---note')
+    const noteName = note.slice(0, note.length - 1)
+    console.log(noteName, '---noteName')
     if (!noteSet.has(noteName)) {
       noteSet.add(noteName)
     }
@@ -83,13 +85,18 @@ const getDistinctNotes = notes => {
 
   return Array.from(noteSet)
 }
-
+function unique(arr) {
+  return Array.from(new Set(arr))
+}
 const distinctNotesWithNames = notes => {
   const distinctNotes = getDistinctNotes(notes)
-  return distinctNotes.map(note => {
+
+  let res = distinctNotes.map(note => {
     const index = keyMapEn.findIndex(name => note == name)
     return keyMap[index]
   })
+
+  return unique(res)
 }
 
 const generateChordName = () => {
