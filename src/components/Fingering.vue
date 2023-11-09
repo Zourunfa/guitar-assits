@@ -31,23 +31,6 @@ const guitarNotes = [
   ['E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3'],
 ]
 
-const compareNotes = (a, b) => {
-  const noteA = a.match(/[A-Ga-g#b]+/)[0]
-  const noteB = b.match(/[A-Ga-g#b]+/)[0]
-  const numA = parseInt(a.match(/\d+/)[0])
-  const numB = parseInt(b.match(/\d+/)[0])
-  const noteOrder = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-
-  if (numA !== numB) {
-    return numA - numB
-  }
-
-  return noteOrder.indexOf(noteA) - noteOrder.indexOf(noteB)
-}
-
-const customSort = notes => {
-  return notes.sort(compareNotes)
-}
 // 全排列
 const permute = arr => {
   const result = []
