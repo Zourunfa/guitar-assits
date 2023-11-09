@@ -4,7 +4,7 @@
 
     <p>{{ chordTone }}</p>
 
-    <el-button @click="generateChordName" type="primary">生成和弦名</el-button>
+    <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
     <p class="chord-name">当前和弦名：{{ chordName }}</p>
     <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
   </div>
@@ -93,9 +93,10 @@ const distinctNotesWithNames = notes => {
 }
 
 const generateChordName = () => {
-  chordTone.value = customSort(chordNotes.value)
-  chordTone.value = distinctNotesWithNames(chordTone.value)
-
+  // chordTone.value = customSort(chordNotes.value)
+  console.log(chordNotes.value, '---chordNotes.value')
+  chordTone.value = distinctNotesWithNames(chordNotes.value)
+  console.log(chordTone.value, '--- chordTone.value')
   chordToneList.value = permute(chordTone.value)
   console.log(chordToneList.value, '----chordToneList.value')
 
@@ -188,6 +189,8 @@ function createFingerSvg() {
         noteText.setAttribute('text-anchor', 'red')
         noteText.textContent = `音名${currentNote.value}` // 请替换为实际的音名
         svg.appendChild(noteText)
+        // 生成和弦名
+        generateChordName()
       })
 
       svg.appendChild(fret)
