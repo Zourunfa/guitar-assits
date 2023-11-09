@@ -1,12 +1,16 @@
 <template>
   <div class="figering-container">
-    <p>现有六根弦各自音名： {{ chordNotes }}</p>
+    <h2 class="panel-title">模拟15品吉他纸板</h2>
+    <div class="finger-pannel"></div>
+    <div class="finger-control">
+      <p class="current-notes">现有六根弦各自音名： {{ chordNotes }}</p>
 
-    <p>{{ chordTone }}</p>
+      <p>{{ chordTone }}</p>
 
-    <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
-    <p class="chord-name">当前和弦名：{{ chordName }}</p>
-    <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
+      <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
+      <p class="chord-name">当前和弦名：{{ chordName }}</p>
+      <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
+    </div>
   </div>
 </template>
 
@@ -110,6 +114,7 @@ function createFingerSvg() {
   // 创建一个SVG元素
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.setAttribute('class', 'finger-panel')
+
   svg.setAttribute('width', '1500')
   svg.setAttribute('height', '300')
 
@@ -187,8 +192,9 @@ function createFingerSvg() {
     }
   }
 
+  // const beforeNode = document.querySelector('.current-notes')
   // 将SVG添加到页面中
-  document.querySelector('.figering-container').appendChild(svg)
+  document.querySelector('.finger-pannel').append(svg)
 }
 onMounted(() => {
   createFingerSvg()
@@ -196,6 +202,17 @@ onMounted(() => {
 </script>
 
 <style>
+.panel-title {
+  margin-top: 5%;
+}
+.finger-pannel {
+  position: relative;
+  right: 20px;
+}
+.finger-control {
+  margin-top: 45px;
+}
+
 .el-tabs__nav-scroll {
   display: flex;
   justify-content: center;
@@ -216,5 +233,42 @@ onMounted(() => {
 
 .chord-name {
   font-size: 30px;
+}
+
+@media screen and (max-width: 1500px) {
+  .finger-pannel {
+    transform: scale(80%);
+    right: 100px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .finger-pannel {
+    transform: scale(70%);
+    right: 120px;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .finger-pannel {
+    transform: scale(60%);
+    right: 150px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .finger-pannel {
+    transform: scale(50%);
+    right: 170px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .finger-pannel {
+    /* max-height: 390px; */
+    width: 95%;
+    right: unset;
+    overflow: auto;
+  }
 }
 </style>
