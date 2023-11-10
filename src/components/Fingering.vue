@@ -266,6 +266,20 @@ onMounted(() => {
 @media screen and (max-width: 800px) {
   .finger-pannel {
     /* max-height: 390px; */
+    transform: scale(40%);
+    right: 180px;
+  }
+}
+@media screen and (max-width: 650px) {
+  .finger-pannel {
+    /* max-height: 390px; */
+    transform: scale(35%);
+    right: 180px;
+  }
+}
+@media screen and (max-width: 420px) {
+  .finger-pannel {
+    /* max-height: 390px; */
     width: 95%;
     right: unset;
     overflow: auto;
