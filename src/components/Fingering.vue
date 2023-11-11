@@ -1,6 +1,7 @@
 <template>
   <div class="figering-container">
     <h2 class="panel-title">模拟15品吉他纸板</h2>
+    <p class="tip">通过点击琴弦品格获取想要知道的和弦名</p>
     <div class="finger-pannel"></div>
     <div class="finger-control">
       <p class="current-notes">现有六根弦各自音名： {{ chordNotes }}</p>
@@ -95,6 +96,11 @@ const generateChordName = () => {
   console.log(chordToneList.value, '----chordToneList.value')
 
   chordNameList.value = chordToneList.value.map(notes => {
+    let noteStr = new ChordName().getChordName(notes)
+    // console.log(noteStr, '---noteStr')
+    if (noteStr[noteStr.length - 1] == '.') {
+      return
+    }
     return new ChordName().getChordName(notes)
   })
   chordName.value = new ChordName().getChordName(chordTone.value)
@@ -229,6 +235,11 @@ onMounted(() => {
 .fret:hover {
   fill: red; /* 悬停状态时的样式，例如将颜色更改为红色 */
   /* 其他悬停状态时的样式属性 */
+}
+
+.tip {
+  opacity: 0.5;
+  font-weight: 600;
 }
 
 .chord-name {
