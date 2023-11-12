@@ -1,12 +1,16 @@
 <template>
   <div class="figering-container">
-    <p>现有六根弦各自音名： {{ chordNotes }}</p>
+    <h2 class="panel-title">模拟15品吉他纸板</h2>
+    <div class="finger-pannel"></div>
+    <div class="finger-control">
+      <p class="current-notes">现有六根弦各自音名： {{ chordNotes }}</p>
 
-    <p>{{ chordTone }}</p>
+      <p>{{ chordTone }}</p>
 
-    <el-button @click="generateChordName" type="primary">生成和弦名</el-button>
-    <p class="chord-name">当前和弦名：{{ chordName }}</p>
-    <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
+      <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
+      <p class="chord-name">当前和弦名：{{ chordName }}</p>
+      <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
+    </div>
   </div>
 </template>
 
@@ -19,7 +23,7 @@ const currentNote = ref('')
 const chordTone = ref(null)
 const chordName = ref('')
 const keyMap = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
-const keyMapEn = ['C', '#C', 'bD', 'D', '#E', 'bE', 'E', 'F', '#F', 'bG', 'G', '#G', 'bA', 'A', '#A', 'bB', 'B']
+const keyMapEn = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
 const chordToneList = ref([])
 const chordNameList = ref([])
 const guitarNotes = [
@@ -31,23 +35,6 @@ const guitarNotes = [
   ['E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3'],
 ]
 
-const compareNotes = (a, b) => {
-  const noteA = a.match(/[A-Ga-g#b]+/)[0]
-  const noteB = b.match(/[A-Ga-g#b]+/)[0]
-  const numA = parseInt(a.match(/\d+/)[0])
-  const numB = parseInt(b.match(/\d+/)[0])
-  const noteOrder = ['C', 'D', 'E', 'F', 'G', 'A', 'B']
-
-  if (numA !== numB) {
-    return numA - numB
-  }
-
-  return noteOrder.indexOf(noteA) - noteOrder.indexOf(noteB)
-}
-
-const customSort = notes => {
-  return notes.sort(compareNotes)
-}
 // 全排列
 const permute = arr => {
   const result = []
@@ -75,7 +62,9 @@ const getDistinctNotes = notes => {
   const noteSet = new Set()
 
   notes.forEach(note => {
-    const noteName = note.match(/[A-Ga-g#b]/)[0]
+    console.log(note, '---note')
+    const noteName = note.slice(0, note.length - 1)
+    console.log(noteName, '---noteName')
     if (!noteSet.has(noteName)) {
       noteSet.add(noteName)
     }
@@ -83,19 +72,25 @@ const getDistinctNotes = notes => {
 
   return Array.from(noteSet)
 }
-
+function unique(arr) {
+  return Array.from(new Set(arr))
+}
 const distinctNotesWithNames = notes => {
   const distinctNotes = getDistinctNotes(notes)
-  return distinctNotes.map(note => {
+
+  let res = distinctNotes.map(note => {
     const index = keyMapEn.findIndex(name => note == name)
     return keyMap[index]
   })
+
+  return unique(res)
 }
 
 const generateChordName = () => {
-  chordTone.value = customSort(chordNotes.value)
-  chordTone.value = distinctNotesWithNames(chordTone.value)
-
+  // chordTone.value = customSort(chordNotes.value)
+  console.log(chordNotes.value, '---chordNotes.value')
+  chordTone.value = distinctNotesWithNames(chordNotes.value)
+  console.log(chordTone.value, '--- chordTone.value')
   chordToneList.value = permute(chordTone.value)
   console.log(chordToneList.value, '----chordToneList.value')
 
@@ -104,10 +99,22 @@ const generateChordName = () => {
   })
   chordName.value = new ChordName().getChordName(chordTone.value)
 }
+
+const clearNoteCircle = currentLine => {
+  console.log(currentLine)
+  const circle = document.querySelectorAll(`.line${currentLine}`)
+  console.log(circle)
+  if (circle) {
+    for (let i = 0; i < circle.length; i++) {
+      circle[i].parentNode.removeChild(circle[i])
+    }
+  }
+}
 function createFingerSvg() {
   // 创建一个SVG元素
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.setAttribute('class', 'finger-panel')
+
   svg.setAttribute('width', '1500')
   svg.setAttribute('height', '300')
 
@@ -142,6 +149,7 @@ function createFingerSvg() {
       fret.setAttribute('stroke', 'black')
       fret.setAttribute('stroke-width', '4')
       fret.setAttribute('data-set-musicId', guitarNotes[i][j + 1])
+
       // 添加 hover 效果到品格
       fret.addEventListener('mouseenter', () => {
         fret.setAttribute('stroke', 'yellowgreen') // 鼠标悬停时改变颜色
@@ -155,14 +163,16 @@ function createFingerSvg() {
 
       // 添加点击事件来生成黑点和音名
       fret.addEventListener('click', () => {
+        // 先清除一条琴弦上的手指点和音名
+        clearNoteCircle(i)
+
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         marker.setAttribute('cx', (x + 50).toString())
         marker.setAttribute('cy', y.toString()) // 使圆点位于中央
         marker.setAttribute('r', '5')
         marker.setAttribute('fill', 'black')
-
+        marker.setAttribute('class', `line${i}`)
         svg.appendChild(marker)
-
         currentNote.value = fret.getAttribute('data-set-musicId')
         chordNotes.value[i] = currentNote.value
 
@@ -170,17 +180,21 @@ function createFingerSvg() {
         const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         noteText.setAttribute('x', x.toString())
         noteText.setAttribute('y', (y + 20).toString()) // 适当调整位置以避免重叠
+        noteText.setAttribute('class', `line${i}`)
         noteText.setAttribute('text-anchor', 'red')
         noteText.textContent = `音名${currentNote.value}` // 请替换为实际的音名
         svg.appendChild(noteText)
+        // 生成和弦名
+        generateChordName()
       })
 
       svg.appendChild(fret)
     }
   }
 
+  // const beforeNode = document.querySelector('.current-notes')
   // 将SVG添加到页面中
-  document.querySelector('.figering-container').appendChild(svg)
+  document.querySelector('.finger-pannel').append(svg)
 }
 onMounted(() => {
   createFingerSvg()
@@ -188,6 +202,17 @@ onMounted(() => {
 </script>
 
 <style>
+.panel-title {
+  margin-top: 5%;
+}
+.finger-pannel {
+  position: relative;
+  right: 20px;
+}
+.finger-control {
+  margin-top: 45px;
+}
+
 .el-tabs__nav-scroll {
   display: flex;
   justify-content: center;
@@ -208,5 +233,56 @@ onMounted(() => {
 
 .chord-name {
   font-size: 30px;
+}
+
+@media screen and (max-width: 1500px) {
+  .finger-pannel {
+    transform: scale(80%);
+    right: 100px;
+  }
+}
+
+@media screen and (max-width: 1300px) {
+  .finger-pannel {
+    transform: scale(70%);
+    right: 120px;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .finger-pannel {
+    transform: scale(60%);
+    right: 150px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .finger-pannel {
+    transform: scale(50%);
+    right: 170px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .finger-pannel {
+    /* max-height: 390px; */
+    transform: scale(40%);
+    right: 180px;
+  }
+}
+@media screen and (max-width: 650px) {
+  .finger-pannel {
+    /* max-height: 390px; */
+    transform: scale(35%);
+    right: 180px;
+  }
+}
+@media screen and (max-width: 420px) {
+  .finger-pannel {
+    /* max-height: 390px; */
+    width: 95%;
+    right: unset;
+    overflow: auto;
+  }
 }
 </style>

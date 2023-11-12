@@ -9,7 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     ChordDraw: typeof import('./src/components/ChordDraw.vue')['default']
     ChordSelect: typeof import('./src/components/ChordSelect.vue')['default']
-    ElButton: typeof import('element-plus/es')['ElButton']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     Fingering: typeof import('./src/components/Fingering.vue')['default']
