@@ -96,11 +96,8 @@ const generateChordName = () => {
   console.log(chordToneList.value, '----chordToneList.value')
 
   chordNameList.value = chordToneList.value.map(notes => {
-    let noteStr = new ChordName().getChordName(notes)
-    // console.log(noteStr, '---noteStr')
-    if (noteStr[noteStr.length - 1] == '.') {
-      return
-    }
+    // let noteStr = new ChordName().getChordName(notes)
+
     return new ChordName().getChordName(notes)
   })
   chordName.value = new ChordName().getChordName(chordTone.value)
