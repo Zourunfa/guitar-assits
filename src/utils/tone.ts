@@ -32,6 +32,7 @@ export class Tone {
     this.position = { string, fret }
   }
 
+  // 获取某个音在音程上的位置
   findKeyIndex(keyString: string): number {
     return this.keyMap.findIndex(item => {
       if (Array.isArray(item)) {
@@ -43,7 +44,7 @@ export class Tone {
       }
     })
   }
-
+  // 音高增减，num为增或减的半音数量
   step(num: number): Tone | null {
     let keyString = this.flat + this.sharp + this.key
     let len = this.keyMap.length
