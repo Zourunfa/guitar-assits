@@ -32,7 +32,6 @@ export class Tone {
     this.position = { string, fret }
   }
 
-  // 获取某个音在音程上的位置
   findKeyIndex(keyString: string): number {
     return this.keyMap.findIndex(item => {
       if (Array.isArray(item)) {
@@ -44,7 +43,7 @@ export class Tone {
       }
     })
   }
-  // 音高增减，num为增或减的半音数量
+
   step(num: number): Tone | null {
     let keyString = this.flat + this.sharp + this.key
     let len = this.keyMap.length
@@ -83,55 +82,55 @@ let tone = new Tone('1')
 
 console.log(tone.findKeyIndex('#5'))
 
-class ChordName {
+export class ChordName {
   private toneUtil: Tone
-  constructor(chordTone: string[]) {
-    this.toneUtil = new Tone()
+
+  constructor() {
+    // Assuming Tone class requires some parameters in the constructor
+    this.toneUtil = new Tone(/* Pass required parameters */)
   }
 
   private getToneSpace(tonePre: string, toneNext: string): number {
     let toneSpace = this.toneUtil.findKeyIndex(toneNext) - this.toneUtil.findKeyIndex(tonePre)
-
     return (toneSpace = toneSpace < 0 ? toneSpace + 12 : toneSpace)
   }
 
-  // 大三度
   private isMajorThird(tonePre: string, toneNext: string): boolean {
     return this.getToneSpace(tonePre, toneNext) === 4
   }
-  // 小三度
+
   private isMinorThird(tonePre: string, toneNext: string): boolean {
     return this.getToneSpace(tonePre, toneNext) === 3
   }
-  // 增三度
+
   private isMajorMajorThird(tonePre: string, toneNext: string): boolean {
     return this.getToneSpace(tonePre, toneNext) === 5
   }
-  // 减三度
+
   private isMinorMinorThird(tonePre: string, toneNext: string): boolean {
     return this.getToneSpace(tonePre, toneNext) === 2
   }
-  // 大三和弦 = 大三度 + 小三度
+
   private isMajorChord(chordTone: string[]): boolean {
     return this.isMajorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
   }
-  // 小三和弦 = 小三度 + 大三度
+
   private isMinorChord(chordTone: string[]): boolean {
     return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMajorThird(chordTone[1], chordTone[2])
   }
-  // 增三和弦 = 大三度 + 大三度
+
   private isAugmentedChord(chordTone: string[]): boolean {
     return this.isMajorThird(chordTone[0], chordTone[1]) && this.isMajorThird(chordTone[1], chordTone[2])
   }
-  // 小三和弦 = 小三度 + 小三度
+
   private isDiminishedChord(chordTone: string[]): boolean {
     return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
   }
-  // 挂四和弦 =  增三度 +  减三度
+
   private isSus4(chordTone: string[]): boolean {
     return this.isMajorMajorThird(chordTone[0], chordTone[1]) && this.isMinorMinorThird(chordTone[1], chordTone[2])
   }
-  // 大小七和弦/属七和弦 7 / Mm7 =
+
   private isMajorMinorSeventhChord(chordTone: string[]): boolean {
     if (chordTone.length < 4) return false
     return this.isMajorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
@@ -166,10 +165,336 @@ class ChordName {
     if (chordTone.length < 4) return false
     return this.isAugmentedChord(chordTone) && this.isMinorMinorThird(chordTone[2], chordTone[3])
   }
+
+  private isAugmentedSeventhChord(chordTone: string[]): boolean {
+    if (chordTone.length < 4) return false
+    return this.isAugmentedChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  private getKeyName(key: string): string {
+    let keyName = this.toneUtil.intervalMap[this.toneUtil.findKeyIndex(key)]
+    if (Array.isArray(keyName)) {
+      keyName = /b/.test(key) ? keyName[1] : keyName[0]
+    }
+    return keyName
+  }
+
+  getChordName(chordTone: string[]): string {
+    let rootKey = chordTone[0]
+    let chordRootName = this.getKeyName(rootKey)
+    let suffix = '...'
+    let suffixArr = []
+
+    let chord3SuffixMap = [
+      {
+        fn: this.isMajorChord,
+        suffix: '',
+      },
+      {
+        fn: this.isMinorChord,
+        suffix: 'm',
+      },
+      {
+        fn: this.isAugmentedChord,
+        suffix: 'aug',
+      },
+      {
+        fn: this.isDiminishedChord,
+        suffix: 'dim',
+      },
+      {
+        fn: this.isSus4,
+        suffix: 'sus4',
+      },
+    ]
+
+    let chord4SuffixMap = [
+      {
+        fn: this.isMajorMinorSeventhChord,
+        suffix: '7',
+      },
+      {
+        fn: this.isMinorMajorSeventhChord,
+        suffix: 'mM7',
+      },
+      {
+        fn: this.isMajorMajorSeventhChord,
+        suffix: 'maj7',
+      },
+      {
+        fn: this.isMinorMinorSeventhChord,
+        suffix: 'm7',
+      },
+      {
+        fn: this.isDiminishedSeventhChord,
+        suffix: 'dim7',
+      },
+      {
+        fn: this.isHalfDiminishedSeventhChord,
+        suffix: 'm7-5',
+      },
+      {
+        fn: this.isHalfAugmentedSeventhChord,
+        suffix: '7#5',
+      },
+
+      {
+        fn: this.isAugmentedSeventhChord,
+        suffix: 'aug7',
+      },
+    ]
+
+    if (chordTone.length === 3) {
+      suffixArr = chord3SuffixMap.filter(item => {
+        return item.fn.bind(this, chordTone)()
+      })
+      suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
+    } else {
+      suffixArr = chord4SuffixMap.filter(item => {
+        return item.fn.bind(this, chordTone)()
+      })
+      suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
+    }
+
+    return chordRootName + suffix
+  }
 }
 
+var chordName = new ChordName()
+console.log(chordName, '---chordName')
+console.log(chordName.getChordName(['1', '3', '5']))
+
+export class GuitarChord {
+  fretLength: number
+  initialTone: Tone[]
+  toneMap: Tone[][]
+
+  chordTone: string[]
+  rootTone: string
+  chordResult: any[]
+
+  constructor() {
+    // 吉他的最大品格数
+    this.fretLength = 15
+    // 构建1到6弦的初始音
+    this.initialTone = [new Tone('3.', 1, 0), new Tone('7', 2, 0), new Tone('5', 3, 0), new Tone('2', 4, 0), new Tone('.6', 5, 0), new Tone('.3', 6, 0)]
+    // 用于吉他上所有位置对应的音
+    this.toneMap = []
+    // 从1到6弦，从品数的低到高，依次计算每个位置的音
+    for (let string = 1; string <= this.initialTone.length; string++) {
+      this.toneMap[string] = []
+      for (let fret = 0; fret <= this.fretLength; fret++) {
+        this.toneMap[string].push(this.initialTone[string - 1].step(fret))
+      }
+    }
+  }
+
+  findFret(key: string, toneArray: Tone[], fretStart = 0, fretEnd?: number): number[] {
+    key = key.replace(/\./g, '')
+    let fretArray: number[] = []
+    fretEnd = fretEnd ? fretEnd + 1 : toneArray.length
+    for (let i = fretStart; i < fretEnd; i++) {
+      if (Array.isArray(toneArray[i])) {
+        let toneStringArray = toneArray[i].map(item => {
+          return item.key
+        })
+        if (toneStringArray.includes(key)) {
+          fretArray.push(i)
+        }
+      } else {
+        if (toneArray[i].key === key) {
+          fretArray.push(i)
+        }
+      }
+    }
+    return fretArray
+  }
+
+  calc(stringIndex: number, toneIndex: number | null, fretStart: number, fretEnd: number, preResult: any | null, positionSave: any[]): boolean {
+    let toneArray = this.toneMap[stringIndex]
+    let result = false
+
+    for (let i = 0; i < this.chordTone.length; i++) {
+      if (i !== toneIndex) {
+        let resultNext = false
+        let toneKey = this.chordTone[i]
+        let fret = this.findFret(toneKey, toneArray, fretStart, fretEnd)
+
+        if (fret.length > 0) {
+          let resultNow = {
+            string: stringIndex,
+            fret: fret[0],
+            key: toneKey,
+          }
+
+          resultNow.pre = preResult ? preResult : null
+          positionSave.push(resultNow)
+
+          resultNext = true
+
+          if (stringIndex < this.initialTone.length) {
+            let nextStringIndex = stringIndex + 1
+            resultNext = resultNext && this.calc(nextStringIndex, i, fretStart, fretEnd, resultNow, positionSave)
+          } else {
+            resultNext = true
+          }
+
+          if (!resultNext) {
+            positionSave.pop()
+          }
+        } else {
+          resultNext = false
+        }
+
+        result = result || resultNext
+      }
+    }
+
+    return result
+  }
+
+  integrityFilter(preResult: any[]): any[] {
+    return preResult.filter((chordItem: any) => {
+      let keyCount = [...new Set(chordItem.map((item: any) => item.key).filter((key: any) => key != null))].length
+      return keyCount === this.chordTone.length
+    })
+  }
+
+  fingerFilter(preResult: any[]): any[] {
+    return preResult.filter((chordItem: any) => {
+      let minFret = Math.min(...chordItem.map((item: any) => item.fret).filter((fret: any) => fret != null))
+      let fingerNum = minFret > 0 ? 1 : 0
+
+      chordItem.forEach((item: any) => {
+        if (item.fret != null && item.fret > minFret) {
+          fingerNum++
+        }
+      })
+
+      return fingerNum <= 4
+    })
+  }
+
+  rootToneFilter(preResult: any[]): any[] {
+    let nextResult = new Set()
+
+    preResult.forEach((item: any) => {
+      let realStringLength = 6
+
+      for (let i = item.length - 1; i >= 0; i--) {
+        if (item[i].key !== this.rootTone) {
+          item[i].fret = null
+          item[i].key = null
+          realStringLength--
+        } else {
+          break
+        }
+      }
+
+      if (realStringLength >= 4) {
+        nextResult.add(JSON.stringify(item))
+      }
+    })
+
+    return [...nextResult].map(item => JSON.parse(item))
+  }
+
+  filter(positionSave: any[]): any[] {
+    let allResult = positionSave
+      .filter(item => {
+        return item.string === this.initialTone.length
+      })
+      .map(item => {
+        let resultItem = [
+          {
+            string: item.string,
+            fret: item.fret,
+            key: item.key,
+          },
+        ]
+
+        while (item.pre) {
+          item = item.pre
+          resultItem.unshift({
+            string: item.string,
+            fret: item.fret,
+            key: item.key,
+          })
+        }
+
+        return resultItem
+      })
+
+    if (allResult.length > 0) {
+      return this.integrityFilter(this.fingerFilter(this.rootToneFilter(allResult)))
+    } else {
+      return []
+    }
+  }
+
+  chord(): any[] {
+    let chordTone
+
+    if (Array.isArray(arguments[0])) {
+      chordTone = arguments[0]
+    } else {
+      chordTone = Array.prototype.slice.apply(arguments).map(item => {
+        let tone = new Tone(item.toString())
+        return tone.flat + tone.sharp + tone.key
+      })
+    }
+
+    this.chordTone = chordTone
+    this.rootTone = chordTone[0]
+    this.chordResult = []
+    let fretArray: number[] = []
+
+    chordTone.forEach(item => {
+      for (let i = 1; i < this.toneMap.length; i++) {
+        fretArray = fretArray.concat(this.findFret(item, this.toneMap[i]))
+      }
+    })
+
+    fretArray = [...new Set(fretArray)]
+    fretArray.sort((a, b) => a - b)
+
+    for (let i = 0; i < fretArray.length; i++) {
+      let fretStart = fretArray[i]
+      let fretEnd = fretStart > 0 ? fretStart + 4 : fretStart + 5
+
+      if (fretEnd <= this.fretLength) {
+        let positionSave: any[] = []
+
+        if (this.calc(1, null, fretStart, fretEnd, null, positionSave)) {
+          this.chordResult.push(...this.filter(positionSave))
+        }
+      }
+    }
+
+    let result = [...new Set(this.chordResult.map(item => JSON.stringify(item)))].map(item => JSON.parse(item))
+
+    return result
+  }
+}
+let chord = new GuitarChord()
+let chordTone = ['1', '3', '5']
+console.log(chord.chord(chordTone))
+
 // 和弦svg绘图
-class ChordSvg {
+export class ChordSvg {
+  private SVG_NS: string
+  private XLINK_NS: string
+  private ATTR_MAP: Record<string, string>
+  private NS_MAP: Record<string, string>
+  private svg: SVGElement
+  private chordRect: SVGElement
+  private chordGird: SVGElement
+  private defs: SVGElement
+  private g_forbidden: SVGElement
+  private g_blank_circle: SVGElement
+  private g_block_circle: SVGElement
+  private minFret: number
+
   constructor() {
     this.SVG_NS = 'http://www.w3.org/2000/svg'
     this.XLINK_NS = 'http://www.w3.org/1999/xlink'
@@ -183,44 +508,53 @@ class ChordSvg {
     this.initChordSvg()
     this.minFret = 0
   }
+
   // 创建svg相关元素
-  createSVG(tag, attributes) {
+  private createSVG(tag: string, attributes: Record<string, any>): SVGElement {
     let elem = document.createElementNS(this.SVG_NS, tag)
+
     for (let attribute in attributes) {
       let name = attribute in this.ATTR_MAP ? this.ATTR_MAP[attribute] : attribute
       let value = attributes[attribute]
+
       if (attribute in this.NS_MAP) {
         elem.setAttributeNS(this.NS_MAP[attribute], name, value)
       } else {
         elem.setAttribute(name, value)
       }
     }
+
     return elem
   }
+
   // 创建use标签
-  createUse(href, x, y) {
+  private createUse(href: string, x: number, y: number): SVGElement {
     return this.createSVG('use', {
       svgHref: href,
       x: x,
       y: y,
     })
   }
+
   // 设置禁止弹奏的叉号位置，位于几弦
-  setForbidden(svg, string = 6) {
+  private setForbidden(svg: SVGElement, string: number = 6): void {
     svg.appendChild(this.createUse('#forbidden', 25 + 20 * (6 - string), 30))
   }
+
   // 设置空弦弹奏的空心圈位置，位于几弦
-  setOpen(svg, string = 6) {
+  private setOpen(svg: SVGElement, string: number = 6): void {
     svg.appendChild(this.createUse('#blank_circle', 25 + 20 * (6 - string), 30))
   }
+
   // 设置指法按弦位置，几弦几品
-  setFinger(svg, string = 6, fret = 0) {
+  private setFinger(svg: SVGElement, string: number = 6, fret: number = 0): void {
     if (+fret > 0 && +fret <= 5) {
       svg.appendChild(this.createUse('#block_circle', 25 + 20 * (6 - string), 35 + 20 * fret))
     }
   }
+
   // 设置大横按位置
-  setBarre(svg, stringTo, fret, barreFret) {
+  private setBarre(svg: SVGElement, stringTo: number, fret: number, barreFret: number): void {
     if (fret > 0 && fret <= 5) {
       svg.appendChild(
         this.createSVG('rect', {
@@ -234,48 +568,56 @@ class ChordSvg {
       )
     }
   }
+
   // 设置把位偏移的数字提示
-  setFretOffset(svg, fret, fretOffset, isBarreCover) {
+  private setFretOffset(svg: SVGElement, fret: number, fretOffset: number, isBarreCover: boolean): void {
     if (fret > 0) {
       let text = this.createSVG('text', {
         className: 'chord-barre-fret',
         x: isBarreCover ? 1 : 8,
         y: 40 + fret * 20,
       })
-      text.innerHTML = fretOffset
+
+      text.innerHTML = fretOffset.toString()
       svg.appendChild(text)
     }
   }
+
   // 设置每根弦在按住和弦后的发音名
-  setStringKey(svg, string, keyName) {
+  private setStringKey(svg: SVGElement, string: number, keyName: string): void {
     let xFixed = keyName.length === 2 ? -4 : 0
     let text = this.createSVG('text', {
       className: 'chord-string-key',
       x: 21.5 + 20 * (6 - string) + xFixed,
       y: 160,
     })
+
     text.innerHTML = keyName
     svg.appendChild(text)
   }
+
   // 设置和弦名称
-  setChordName(svg, name = '') {
+  private setChordName(svg: SVGElement, name: string = ''): void {
     let xFixed = /\.\.\./.test(name) ? 10 : 0
     let text = this.createSVG('text', {
       className: 'chord-name',
-      x: 75 - name.toString().length * 7 + xFixed,
+      x: 75 - name.length * 7 + xFixed,
       y: 20,
     })
+
     text.innerHTML = name
     svg.appendChild(text)
   }
+
   // 初始化svg
-  initChordSvg() {
+  private initChordSvg(): void {
     // svg元素
     this.svg = this.createSVG('svg', {
       className: 'chord-svg',
       viewBox: '0 0 150 150',
       preserveAspectRatio: 'xMidYMin meet',
     })
+
     // 和弦图方块
     this.chordRect = this.createSVG('rect', {
       className: 'chord-rect',
@@ -284,27 +626,33 @@ class ChordSvg {
       rx: 5,
       ry: 5,
     })
+
     // 和弦网格，代表弦和品
     this.chordGird = this.createSVG('path', {
       className: 'chord-gird',
       d: 'M25 65 L125 65 M25 85 L125 85 M25 105 L125 105 M25 125 L125 125 M45 45 L45 145 M65 45 L65 145 M85 45 L85 145 M105 45 L105 145 M25 40 L125 40',
     })
+
     // 用于放置可复用的svg元素
     this.defs = this.createSVG('defs')
+
     // 禁止按弦的叉号标志
     this.g_forbidden = this.createSVG('g', {
       id: 'forbidden',
     })
+
     this.g_forbidden.appendChild(
       this.createSVG('path', {
         className: 'chord-forbidden',
         d: 'M-5 -5 L5 5 M-5 5 L5 -5',
       })
     )
+
     // 空弦弹奏的空心圈标志
     this.g_blank_circle = this.createSVG('g', {
       id: 'blank_circle',
     })
+
     this.g_blank_circle.appendChild(
       this.createSVG('circle', {
         className: 'chord-blank-circle',
@@ -313,10 +661,12 @@ class ChordSvg {
         r: 6,
       })
     )
+
     // 表示按弦位置的实心圈标志
     this.g_block_circle = this.createSVG('g', {
       id: 'block_circle',
     })
+
     this.g_block_circle.appendChild(
       this.createSVG('circle', {
         className: 'chord-block-circle',
@@ -325,28 +675,32 @@ class ChordSvg {
         r: 8,
       })
     )
+
     // 可复用元素加入
     this.defs.appendChild(this.g_forbidden)
     this.defs.appendChild(this.g_blank_circle)
     this.defs.appendChild(this.g_block_circle)
+
     // svg子元素加入
     this.svg.appendChild(this.chordRect)
     this.svg.appendChild(this.chordGird)
     this.svg.appendChild(this.defs)
   }
+
   // 绘制和弦svg图案
   /*
    * @param chordTone 和弦组成音数组
    * @param chord 和弦指法结果
    * @param target svg指法图dom容器
    */
-  drawChord(chordTone, chord, target) {
-    let svg = this.svg.cloneNode(true)
+  public drawChord(chordTone: string[], chord: any[], target?: Element): void {
+    let svg = this.svg.cloneNode(true) as SVGElement
+
     let fretArr = chord.map(item => item.fret).filter(fret => fret != null)
     // 和弦指法中出现的最高品格位置
-    let maxFret = Math.max.apply(null, fretArr)
+    let maxFret = Math.max(...fretArr)
     // 和弦指法中出现的最低品位位置
-    let minFret = Math.min.apply(null, fretArr)
+    let minFret = Math.min(...fretArr)
     // svg指法图案的起始品格位置相对于吉他上0品位置的偏移量
     let fretOffset = maxFret <= 5 ? 0 : minFret
     // 记录指法最低品位可能需要大横按的按弦数
@@ -379,6 +733,7 @@ class ChordSvg {
         this.setStringKey(svg, item.string, chordName.getKeyName(item.key))
       }
     })
+
     // 将真实的按弦品格位置转换为相对于svg图案上的品格位置
     let relativeFret = fretOffset > 0 ? minFret - fretOffset + 1 : minFret
     if (barreCount > 1) {
@@ -389,7 +744,7 @@ class ChordSvg {
     this.setFretOffset(svg, relativeFret, minFret, barreStringTo === 6)
     // 在图案上侧绘制和弦名称
     this.setChordName(svg, chordName.getChordName(chordTone))
-    // 将生成号的svg图案塞到指定结构中
+    // 将生成的svg图案塞到指定结构中
     target ? target.appendChild(svg) : document.body.appendChild(svg)
   }
 }
