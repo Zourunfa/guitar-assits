@@ -433,6 +433,7 @@ export class GuitarChord {
   }
 
   chord(): any[] {
+    // debugger
     let chordTone
 
     if (Array.isArray(arguments[0])) {
@@ -456,6 +457,7 @@ export class GuitarChord {
     })
 
     fretArray = [...new Set(fretArray)]
+    console.log(fretArray, '---fretArray')
     fretArray.sort((a, b) => a - b)
 
     for (let i = 0; i < fretArray.length; i++) {

@@ -263,6 +263,7 @@ export class GuitarChord {
   }
   // 和弦指法计算入口
   chord() {
+    // debugger
     let chordTone
     if (is(arguments[0])('Array')) {
       chordTone = arguments[0]
@@ -272,6 +273,7 @@ export class GuitarChord {
         return tone.flat + tone.sharp + tone.key
       })
     }
+
     // 和弦组成音
     this.chordTone = chordTone
     // 根音
@@ -285,6 +287,8 @@ export class GuitarChord {
       }
     })
     fretArray = [...new Set(fretArray)]
+
+    console.log(fretArray, '---fretArray')
     // 品格位置从小到大排序
     fretArray.sort((a, b) => {
       return a - b
@@ -309,7 +313,9 @@ export class GuitarChord {
     return result
   }
 }
-
+let chord = new GuitarChord()
+let chordTone = ['1', '3', '5']
+console.log(chord.chord(chordTone))
 // 和弦名称推导
 export class ChordName {
   constructor(chordTone) {
