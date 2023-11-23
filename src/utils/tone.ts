@@ -495,7 +495,7 @@ export class ChordSvg {
   private g_forbidden: SVGElement
   private g_blank_circle: SVGElement
   private g_block_circle: SVGElement
-  private minFret: number
+  // private minFret: number
 
   constructor() {
     this.SVG_NS = 'http://www.w3.org/2000/svg'
