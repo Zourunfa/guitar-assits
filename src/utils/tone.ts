@@ -289,6 +289,13 @@ export class GuitarChord {
     }
   }
 
+  /*
+   * @param key 搜寻的音（字符串形式）
+   * @param toneArray 音域数组，即某根弦上所有单音类按顺序组成的数组
+   * @param fretStart 搜寻的最低品格数
+   * @param fretEnd 搜寻的最高品格数
+   */
+
   findFret(key: string, toneArray: Tone[], fretStart = 0, fretEnd?: number): number[] {
     key = key.replace(/\./g, '')
     let fretArray: number[] = []
