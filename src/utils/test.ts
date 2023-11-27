@@ -1,3 +1,9 @@
+export function is(data: any) {
+  return function (type: string) {
+    return Object.prototype.toString.call(data) === `[object ${type}]`
+  }
+}
+
 export class Tone {
   syllableMap: string[] = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si'] //所有唱名数组
   keyMap: (string | string[])[] = ['1', ['#1', 'b2'], '2', ['#2', 'b3'], '3', '4', ['#4', 'b5'], '5', ['#5', 'b6'], '6', ['#6', 'b7'], '7'] // 音程
@@ -86,14 +92,12 @@ export class GuitarChord {
     this.fretLength = 15
     // 构建1到6弦的初始音
     this.initialTone = [new Tone('3.', 1, 0), new Tone('7', 2, 0), new Tone('5', 3, 0), new Tone('2', 4, 0), new Tone('.6', 5, 0), new Tone('.3', 6, 0)]
-
-    // 用于吉他所有位置对应的音
-
-    for (let string = 1; string < this.initialTone.length; string++) {
-      // 每根弦上的音都用一个数组存储
+    // 用于吉他上所有位置对应的音
+    this.toneMap = []
+    // 从1到6弦，从品数的低到高，依次计算每个位置的音
+    for (let string = 1; string <= this.initialTone.length; string++) {
       this.toneMap[string] = []
-      for (let fret = 0; fret < this.fretLength; fret++) {
-        // 计算出每个品格的音
+      for (let fret = 0; fret <= this.fretLength; fret++) {
         this.toneMap[string].push(this.initialTone[string - 1].step(fret))
       }
     }
@@ -174,9 +178,64 @@ export class GuitarChord {
           // 没有遍历完所有的6根弦，则继续往下一根弦计算，附带上本次结果记录
           if (stringIndex < this.initialTone.length) {
             let nextStringIndex = stringIndex + 1
+            // 该弦上的结果有效标记 取决于它后面的弦的结果也有效
+            resultNext = resultNext && this.calc(nextStringIndex, i, fretStart, fretEnd, resultNow, positionSave)
+          } else {
+            // 所有弦均遍历成功，代表递归结果有效
+            resultNext = true
           }
+
+          if (!resultNext) {
+            positionSave.pop()
+          }
+        } else {
+          resultNext = false
         }
+
+        result = result || resultNext
       }
+    }
+
+    return result
+  }
+
+  // 和弦指法过滤器
+  filter(positionSave: any[]): any[] {
+    // 从六弦开始回溯记录和和弦指法的结果，拆解所有指法的组合
+    let allResult = positionSave
+      .filter(item => {
+        return item.string === this.initialTone.length
+      })
+      .map(item => {
+        let resultItem = [
+          {
+            string: item.string,
+            fret: item.fret,
+            key: item.key,
+          },
+        ]
+
+        while (item.pre) {
+          item = item.pre
+          resultItem.unshift({
+            string: item.string,
+            fret: item.fret,
+            key: item.key,
+          })
+        }
+
+        return resultItem
+      })
+
+    if (allResult.length > 0) {
+      // 依次调用各个过滤器
+      return this.integrityFilter(this.fingerFilter(this.rootToneFilter(allResult)))
+    } else {
+      return []
     }
   }
 }
+
+const guitarTestCalc = new GuitarChord()
+
+console.log(guitarTestCalc.calc())
