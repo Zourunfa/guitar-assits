@@ -110,28 +110,32 @@ export class GuitarChord {
    * @param fretEnd 搜寻的最高品格数
    */
 
-  findFret(key: string, toneArray: Tone[], fretStart = 0, fretEnd?: number): number[] {
-    // 把点去掉
-    key = key.replace(/\./, '')
-    let fretArray: number[] = []
-    fretEnd = fretEnd ? fretEnd + 1 : toneArray.length
+  /*
+   * @param key 搜寻的音（字符串形式）
+   * @param toneArray 音域数组，即某根弦上所有单音类按顺序组成的数组
+   * @param fretStart 搜寻的最低品格数
+   * @param fretEnd 搜寻的最高品格数
+   */
 
+  findFret(key: string, toneArray: Tone[], fretStart = 0, fretEnd?: number): number[] {
+    key = key.replace(/\./g, '')
+    let fretArray: number[] = []
+    fretStart = fretStart ? fretStart : 0
+    fretEnd = fretEnd ? fretEnd + 1 : toneArray.length
     for (let i = fretStart; i < fretEnd; i++) {
       if (Array.isArray(toneArray[i])) {
         let toneStringArray = toneArray[i].map(item => {
-          return item.key
+          return item.toneNormal
         })
-
         if (toneStringArray.includes(key)) {
           fretArray.push(i)
         }
       } else {
-        if (toneArray[i].key === key) {
+        if (toneArray[i].toneString.replace(/\./g, '') === key) {
           fretArray.push(i)
         }
       }
     }
-
     return fretArray
   }
 
@@ -287,9 +291,11 @@ export class GuitarChord {
   }
 
   // 和弦指法计算入口
-  chord() {
+  chord(): any[] {
+    // debugger
     let chordTone
-    if (is(arguments[0])('Array')) {
+
+    if (Array.isArray(arguments[0])) {
       chordTone = arguments[0]
     } else {
       chordTone = Array.prototype.slice.apply(arguments).map(item => {
@@ -298,23 +304,41 @@ export class GuitarChord {
       })
     }
 
-    // 和弦组成音
     this.chordTone = chordTone
-    // 根音
     this.rootTone = chordTone[0]
     this.chordResult = []
-    let fretArray = []
-
-    // 查找和弦里的音可能存在的品格位置,保存到fretArray
-
+    let fretArray: number[] = []
+    console.log(this.chordTone, '---  this.chordTone')
     chordTone.forEach(item => {
-      for (let i = 0; i < this.toneMap.length; i++) {
+      console.log(this.toneMap, '--this.toneMap')
+      for (let i = 1; i < this.toneMap.length; i++) {
         fretArray = fretArray.concat(this.findFret(item, this.toneMap[i]))
       }
     })
+
+    fretArray = [...new Set(fretArray)]
+    console.log(fretArray, '---fretArray')
+    fretArray.sort((a, b) => a - b)
+
+    for (let i = 0; i < fretArray.length; i++) {
+      let fretStart = fretArray[i]
+      let fretEnd = fretStart > 0 ? fretStart + 4 : fretStart + 5
+
+      if (fretEnd <= this.fretLength) {
+        let positionSave: any[] = []
+
+        if (this.calc(1, null, fretStart, fretEnd, null, positionSave)) {
+          this.chordResult.push(...this.filter(positionSave))
+        }
+      }
+    }
+
+    let result = [...new Set(this.chordResult.map(item => JSON.stringify(item)))].map(item => JSON.parse(item))
+    // debugger
+    return result
   }
 }
 
 const guitarTestCalc = new GuitarChord()
-
-console.log(guitarTestCalc.calc())
+let chordTone = ['1', '3', '5']
+console.log(guitarTestCalc.chord(chordTone), '---123')
