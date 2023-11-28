@@ -285,6 +285,34 @@ export class GuitarChord {
     })
     return [...nextResult].map(item => JSON.parse(item))
   }
+
+  // 和弦指法计算入口
+  chord() {
+    let chordTone
+    if (is(arguments[0])('Array')) {
+      chordTone = arguments[0]
+    } else {
+      chordTone = Array.prototype.slice.apply(arguments).map(item => {
+        let tone = new Tone(item.toString())
+        return tone.flat + tone.sharp + tone.key
+      })
+    }
+
+    // 和弦组成音
+    this.chordTone = chordTone
+    // 根音
+    this.rootTone = chordTone[0]
+    this.chordResult = []
+    let fretArray = []
+
+    // 查找和弦里的音可能存在的品格位置,保存到fretArray
+
+    chordTone.forEach(item => {
+      for (let i = 0; i < this.toneMap.length; i++) {
+        fretArray = fretArray.concat(this.findFret(item, this.toneMap[i]))
+      }
+    })
+  }
 }
 
 const guitarTestCalc = new GuitarChord()
