@@ -234,6 +234,57 @@ export class GuitarChord {
       return []
     }
   }
+  // 和弦组成音完整性过滤
+  integrityFilter(preResult: any[]): any[] {
+    return preResult.filter((chordItem: any) => {
+      let keyCount = [...new Set(chordItem.map(item => item.key).filter(key => key != null))].length
+      return keyCount == this.chordTone.length
+    })
+  }
+  // 按弦手指数量过滤
+  fingerFilter(preResult) {
+    return preResult.filter(chordItem => {
+      // 按弦的最小品位
+      let minFret = Math.min.apply(
+        null,
+        chordItem.map(item => item.fret).filter(fret => fret != null)
+      )
+      // 记录需要的手指数量
+      let fingerNum = minFret > 0 ? 1 : 0
+
+      chordItem.forEach(item => {
+        if (item.fret !== null && item.fret > minFret) {
+          fingerNum++
+        }
+      })
+
+      return fingerNum < 4
+    })
+  }
+
+  // 根音条件过滤
+  rootToneFilter(preResult) {
+    let nextResult = new Set()
+    preResult.forEach(item => {
+      // 允许发声的弦的总数,初始为6
+      let realStringLength = 6
+      // 从低音弦到高音弦遍历，不符合根音条件则禁止发声
+      for (var i = item.length - 1; i >= 0; i--) {
+        if (item[i].key !== this.rootTone) {
+          item[i].fret = null
+          item[i].key = null
+          realStringLength--
+        } else {
+          break
+        }
+      }
+      if (realStringLength >= 4) {
+        // 去重复
+        nextResult.add(JSON.stringify(item))
+      }
+    })
+    return [...nextResult].map(item => JSON.parse(item))
+  }
 }
 
 const guitarTestCalc = new GuitarChord()
