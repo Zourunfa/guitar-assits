@@ -312,6 +312,19 @@ export class GuitarChord {
         fretArray = fretArray.concat(this.findFret(item, this.toneMap[i]))
       }
     })
+
+    fretArray = [...new Set(fretArray)]
+    // 品格位置从小到大排列
+    fretArray.sort((a, b) => {
+      return a - b
+    })
+
+    // 从低把位到高把位，计算范围内所有和弦指法
+    for (let i = 0; i < fretArray.length; i++) {
+      let fretStart = fretArrary[i]
+      // 在不需要大横按的时候，即在最低把位计算的时候，可以把计算品格扩大一倍
+      let fretEnd = fretStart > 0 ? fretStart + 4 : fretStart
+    }
   }
 }
 

@@ -6,7 +6,7 @@ import 'element-plus/dist/index.css'
 
 import './utils/tone.ts'
 import './utils/tone.js'
-import './utils/test.ts'
+import './utils/test.js'
 const app = createApp(App)
 
 app.use(ElementPlus)
