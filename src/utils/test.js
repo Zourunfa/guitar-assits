@@ -4,6 +4,17 @@ function is(data) {
     return Object.prototype.toString.call(data) === `[object ${type}]`
   }
 }
+/**
+可以借用简谱的标记方式，数字1、2、3、4、5、6、7，
+分别代表唱名的do、re、mi、fa、sol、la、si；
+当这个音升半调时，在数字的前面加上#，例如#1（升do），
+降半调时，在数字前面加上b，例如b1（降do）；
+当标记一个音的高八度音时，在数字的右侧加一个“点号”，
+例如1.（高音do），#2.（高音升re）（因为字符串没法像简谱那样在数字顶部加点号），
+当标记一个音的低八度音时，在数字的左侧加一个“点号”，例如.1（低音do），
+.b2（低音降re）；
+ */
+
 // 单音类，用于音的映射与音高的改变，同时可标记记录其在吉他上的位置
 export class Tone {
   constructor(toneString = '1', string, fret) {
@@ -36,7 +47,7 @@ export class Tone {
     console.log(octave_sharp, '---octave_sharp')
     // 八度度数
     this.octave = (octave_sharp ? octave_sharp.length : 0) - (octave_flat ? octave_flat.length : 0) // 八度度数
-
+    console.log(this.octave, '--octave')
     this.position = {
       // 第几弦
       string: string,
@@ -60,7 +71,6 @@ export class Tone {
 
   // 音高增减，num为增或减的半音数量
   step(num) {
-    debugger
     // 组合升降调之后的最终音名
     let keyString = this.flat + this.sharp + this.key
     // 音程数组的长度
@@ -102,6 +112,6 @@ export class Tone {
   }
 }
 
-let tone = new Tone('7')
+let tone = new Tone('7..')
 
 tone.step(8)
