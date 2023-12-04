@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+// @ts-ignore
 import { ChordName } from '../utils/tone.js'
 
 const chordNotes = ref(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])

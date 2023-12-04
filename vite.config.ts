@@ -37,5 +37,11 @@ export default defineConfig(async () => ({
         }
       },
     },
+
+    terserOptions: {
+      compress: {
+        // warningsFilter:{}
+      },
+    },
   },
 }))
