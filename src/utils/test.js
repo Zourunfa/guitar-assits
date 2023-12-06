@@ -146,4 +146,27 @@ export class ChordName {
     // 大三度 +  小三度
     return this.isMajorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
   }
+  // 小三和弦
+  isMajorChord(chordTone) {
+    //小三度 + 大三度
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMajorThird(chordTone[1], chordTone[2])
+  }
+
+  // 增三和弦
+  isAugmentedChord(chordTone) {
+    // 大三度 + 大三度
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
+  }
+
+  // 减三和弦
+  isDiminishedChord(chordTone) {
+    // 小三度 + 小三度
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(hordTone[1], chordTone[2])
+  }
+
+  // 挂四和弦
+  isSus4(chordTone) {
+    // 增三度 + 减三度
+    return this.isMajorMajorThird(chordTone[0], chordTone[1]) && this.isMinorMinorThird(chordTone[1], chordTone[2])
+  }
 }
