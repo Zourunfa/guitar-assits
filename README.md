@@ -1,5 +1,8 @@
 #guitar-assits
-https://zourunfa.github.io/guitar-assist/
+
+(Under design, not yet perfected)
+
+https://zourunfa.github.io/guitar-assist/  
 
 to learing guitar base theory with coding
   
