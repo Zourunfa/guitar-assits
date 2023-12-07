@@ -169,4 +169,19 @@ export class ChordName {
     // 增三度 + 减三度
     return this.isMajorMajorThird(chordTone[0], chordTone[1]) && this.isMinorMinorThird(chordTone[1], chordTone[2])
   }
+
+  // 四个音
+
+  // // 大小七和弦/ 属7和弦
+  isMajorMinorSeventhChord(chordTone) {
+    if (chordTone.length < 4) return false
+    //  大三度 +  小三度 + 小三度
+    return this.isMajorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  // 小大七和弦
+  isMajorMinorSeventhChord(chordTone) {
+    //  小三度 +  大三度 + 大三度
+    return this.isMajorChord(chordTone)
+  }
 }
