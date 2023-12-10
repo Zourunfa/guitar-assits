@@ -176,12 +176,42 @@ export class ChordName {
   isMajorMinorSeventhChord(chordTone) {
     if (chordTone.length < 4) return false
     //  大三度 +  小三度 + 小三度
+    // 大三度
     return this.isMajorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
   }
 
   // 小大七和弦
   isMajorMinorSeventhChord(chordTone) {
+    if (chordTone.length < 4) return false
     //  小三度 +  大三度 + 大三度
-    return this.isMajorChord(chordTone)
+    // 小三和弦 + 大三度
+    return this.isMinorChord(chordTone) && this.isMajorThird(chordTone[2], chordTone[3])
+  }
+
+  // 大七和弦
+  isMajorMinorSeventhChord(chordTone) {
+    if (chordTone.length < 4) {
+      return false
+    }
+    // 大三和弦+大三度
+    return this.isMajorChord(chordTone) && this.isMajorThird(chordTone[2], chordTone[3])
+  }
+
+  // 小七和弦
+  isMinorMinorSeventhChord(chordTone) {
+    if (chordTone.length < 4) {
+      return false
+    }
+    // 小三和弦 + 小三度
+    return this.isMinorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  // 减七和弦 dim7
+  isDiminishedSeventhChord(chordTone) {
+    if (chordTone.length < 4) {
+      return false
+    }
+    // 减三和弦 + 大三度
+    return this.isDiminishedChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
   }
 }
