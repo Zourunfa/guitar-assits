@@ -1,5 +1,5 @@
 // 检测数据类型的公用方法
-function is(data) {
+export function is(data) {
   return function (type) {
     return Object.prototype.toString.call(data) === `[object ${type}]`
   }

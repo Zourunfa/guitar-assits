@@ -112,6 +112,89 @@ export class Tone {
   }
 }
 
-let tone = new Tone('7..')
+export class GuitarChord {
+  constructor() {
+    // 吉他的最大品格数
+    this.fretLength = 15
+    // 构建1到6弦的初始音
+    this.initialTone = [new Tone('3.', 1, 0), new Tone('7', 2, 0), new Tone('5', 3, 0), new Tone('2', 4, 0), new Tone('.6', 5, 0), new Tone('.3', 6, 0)]
+    // 用于吉他上所有位置对应的音
+    this.toneMap = []
+  }
+}
 
-tone.step(8)
+// 和弦名称推导
+export class ChordName {
+  constructor(chordTone) {
+    // 实例化一个单音类做工具，用来计算音与各种标记的映射关系
+    this.toneUtil = new Tone()
+  }
+
+  // 获取两个音的间隔跨度
+  getToneSpace(tonePre, toneNext) {
+    let toneSpace = this.toneUtil.findKeyIndex(toneNext) - this.toneUtil.findKeyIndex(tonePre)
+    return (toneSpace = toneSpace < 0 ? toneSpace + 12 : toneSpace)
+  }
+
+  // 大三度 4个半音
+  isMajorThird(tonePre, toneNext) {
+    return this.getToneSpace(tonePre, toneNext) === 4
+  }
+
+  // 小三度
+  isMinorThird(tonePre, toneNext) {
+    return this.getToneSpace(tonePre, toneNext) === 3
+  }
+  // 增三度
+  isMajorMajorThird(tonePre, toneNext) {
+    return this.getToneSpace(tonePre, toneNext) === 5
+  }
+  // 减三度
+  isMinorMinorThird(tonePre, toneNext) {
+    return this.getToneSpace(tonePre, toneNext) === 2
+  }
+
+  // 大三和弦
+  isMajorChord(chordTone) {
+    // 大三度 +  小三度
+    return this.isMajorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
+  }
+  // 小三和弦
+  isMajorChord(chordTone) {
+    //小三度 + 大三度
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMajorThird(chordTone[1], chordTone[2])
+  }
+
+  // 增三和弦
+  isAugmentedChord(chordTone) {
+    // 大三度 + 大三度
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(chordTone[1], chordTone[2])
+  }
+
+  // 减三和弦
+  isDiminishedChord(chordTone) {
+    // 小三度 + 小三度
+    return this.isMinorThird(chordTone[0], chordTone[1]) && this.isMinorThird(hordTone[1], chordTone[2])
+  }
+
+  // 挂四和弦
+  isSus4(chordTone) {
+    // 增三度 + 减三度
+    return this.isMajorMajorThird(chordTone[0], chordTone[1]) && this.isMinorMinorThird(chordTone[1], chordTone[2])
+  }
+
+  // 四个音
+
+  // // 大小七和弦/ 属7和弦
+  isMajorMinorSeventhChord(chordTone) {
+    if (chordTone.length < 4) return false
+    //  大三度 +  小三度 + 小三度
+    return this.isMajorChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  // 小大七和弦
+  isMajorMinorSeventhChord(chordTone) {
+    //  小三度 +  大三度 + 大三度
+    return this.isMajorChord(chordTone)
+  }
+}
