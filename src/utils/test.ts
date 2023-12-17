@@ -324,8 +324,31 @@
 //       let fretStart = fretArray[i]
 //       let fretEnd = fretStart > 0 ? fretStart + 4 : fretStart + 5
 
+<<<<<<< HEAD
+    chordTone.forEach(item => {
+      for (let i = 0; i < this.toneMap.length; i++) {
+        fretArray = fretArray.concat(this.findFret(item, this.toneMap[i]))
+      }
+    })
+
+    fretArray = [...new Set(fretArray)]
+    // 品格位置从小到大排列
+    fretArray.sort((a, b) => {
+      return a - b
+    })
+
+    // 从低把位到高把位，计算范围内所有和弦指法
+    for (let i = 0; i < fretArray.length; i++) {
+      let fretStart = fretArrary[i]
+      // 在不需要大横按的时候，即在最低把位计算的时候，可以把计算品格扩大一倍
+      let fretEnd = fretStart > 0 ? fretStart + 4 : fretStart
+    }
+  }
+}
+=======
 //       if (fretEnd <= this.fretLength) {
 //         let positionSave: any[] = []
+>>>>>>> b2ca05985d24b068cbc4f792dea9c9c8dd6ee164
 
 //         if (this.calc(1, null, fretStart, fretEnd, null, positionSave)) {
 //           this.chordResult.push(...this.filter(positionSave))
