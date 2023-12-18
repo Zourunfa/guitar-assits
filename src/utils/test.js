@@ -36,9 +36,9 @@ export class Tone {
     this.flat = toneString.match('b') ? 'b' : ''
     // 升半调标记
     this.sharp = toneString.match('#') ? '#' : ''
-
+    // 去掉数字音的形式
     let octave_arr = toneString.split(this.key)
-
+    //
     let octave_flat = octave_arr[0].toString().match(/\./g)
     let octave_sharp = octave_arr[1].toString().match(/\./g)
     console.log(this.key, '--thiskey')
@@ -71,6 +71,7 @@ export class Tone {
 
   // 音高增减，num为增或减的半音数量
   step(num) {
+    // debugger
     // 组合升降调之后的最终音名
     let keyString = this.flat + this.sharp + this.key
     // 音程数组的长度
@@ -111,6 +112,10 @@ export class Tone {
     }
   }
 }
+
+let tone = new Tone('#6...')
+
+console.log(tone.step(5), '----step')
 
 export class GuitarChord {
   constructor() {
@@ -226,5 +231,103 @@ export class ChordName {
     }
     // 减三和弦 + 大三度
     return this.isDiminishedChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  // 半减七和弦 m7-5
+  isHalfDiminishedSeventhChord(chordTone) {
+    if (chordTone.length < 4) return false
+    return this.isDiminishedChord(chordTone) && this.isMajorThird(chordTone[2], chordTone[3])
+  }
+  // 增属七和弦  7#5 / M7+5
+  isHalfAugmentedSeventhChord(chordTone) {
+    if (chordTone.length < 4) return false
+    return this.isAugmentedChord(chordTone) && this.isMinorMinorThird(chordTone[2], chordTone[3])
+  }
+  // 增大七和弦 aug7 / Maj7#5
+  isAugmentedSeventhChord(chordTone) {
+    if (chordTone.length < 4) return false
+    return this.isAugmentedChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
+  }
+
+  // 获取音对应的根音和弦名
+  getKeyName(key) {
+    let keyName = this.toneUtil.intervalMap[this.toneUtil.findKeyIndex(key)]
+
+    if (is(keyName)('Array')) {
+      keyName = /b/.test(key) ? keyName[1] : keyName[0]
+    }
+
+    return keyName
+  }
+
+  // 计算和弦名
+
+  getChordName(chordTone) {
+    // 根音
+    let rootKey = chordTone[0]
+    // 和弦的字母名
+    let chordRootName = this.getKeyName(rootKey)
+    // 和弦字母后面的具体修饰名
+    let suffix = '...'
+    let suffixArr = []
+    // 三音和弦的遍历方法及对应的修饰名
+    let chord3SuffixMap = [
+      {
+        fn: this.isMajorChord,
+        suffix: '',
+      },
+      {
+        fn: this.isMinorChord,
+        suffix: 'm',
+      },
+      {
+        fn: this.isAugmentedChord,
+        suffix: 'aug',
+      },
+      {
+        fn: this.isDiminishedChord,
+        suffix: 'dim',
+      },
+      {
+        fn: this.isSus4,
+        suffix: 'sus4',
+      },
+    ]
+
+    // 四音和弦的遍历方法及对应修饰名
+    let chord4SuffixMap = [
+      {
+        fn: this.isMajorMinorSeventhChord,
+        suffix: '7',
+      },
+      {
+        fn: this.isMinorMajorSeventhChord,
+        suffix: 'mM7',
+      },
+      {
+        fn: this.isMajorMajorSeventhChord,
+        suffix: 'maj7',
+      },
+      {
+        fn: this.isMinorMinorSeventhChord,
+        suffix: 'm7',
+      },
+      {
+        fn: this.isDiminishedSeventhChord,
+        suffix: 'dim7',
+      },
+      {
+        fn: this.isHalfDiminishedSeventhChord,
+        suffix: 'm7-5',
+      },
+      {
+        fn: this.isHalfAugmentedSeventhChord,
+        suffix: '7#5',
+      },
+      {
+        fn: this.isAugmentedSeventhChord,
+        suffix: 'aug7',
+      },
+    ]
   }
 }
