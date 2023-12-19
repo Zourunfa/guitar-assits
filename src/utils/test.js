@@ -329,5 +329,20 @@ export class ChordName {
         suffix: 'aug7',
       },
     ]
+
+    if (chordTone.length === 3) {
+      suffixArr = chord3SuffixMap.filter(item => {
+        return item.fn.bind(this, chordTone)()
+      })
+
+      suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
+    } else {
+      suffixArr = chord4SuffixMap.filter(item => {
+        return item.fn.bind(this, chordTone)()
+      })
+      suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
+    }
+    // 拼接起来得到完整的和弦名
+    return chordRootName + suffix
   }
 }
