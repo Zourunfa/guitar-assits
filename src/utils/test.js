@@ -346,3 +346,33 @@ export class ChordName {
     return chordRootName + suffix
   }
 }
+
+export class ChordSvg {
+  constructor() {
+    this.SVG_NS = 'http://www.w3.org/2000/svg'
+    this.XLINK_NS = 'http://www.w3.org/1999/xlink'
+    this.ATTR_MAP = {
+      className: 'class',
+      svgHref: 'href',
+    }
+    this.NS_MAP = {
+      svgHref: this.XLINK_NS,
+    }
+    this.initChordSvg()
+    this.minFret = 0
+  }
+  // 创建svg相关元素
+  createSVG(tag, attributes) {
+    let elem = document.createElementNS(this.SVG_NS, tag)
+    for (let attribute in attributes) {
+      let name = attribute in this.ATTR_MAP ? this.ATTR_MAP[attribute] : attribute
+      let value = attributes[attribute]
+      if (attribute in this.NS_MAP) {
+        elem.setAttributeNS(this.NS_MAP[attribute], name, value)
+      } else {
+        elem.setAttribute(name, value)
+      }
+    }
+    return elem
+  }
+}
