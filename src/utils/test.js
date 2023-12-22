@@ -375,4 +375,27 @@ export class ChordSvg {
     }
     return elem
   }
+
+  // 创建use标签
+  createUse(href, x, y) {
+    return this.createSVG('use', {
+      svgHref: href,
+      x: x,
+      y: y,
+    })
+  }
+  // 设置禁止弹奏的叉号位置，位于几弦
+  setForbidden(svg, string = 6) {
+    svg.appendChild(this.createUse('#forbidden', 25 + 20 * (6 - string), 30))
+  }
+  // 设置空弦弹奏的空心圈位置，位于几弦
+  setOpen(svg, string = 6) {
+    svg.appendChild(this.createUse('#blank_circle', 25 + 20 * (6 - string), 30))
+  }
+  // 设置指法按弦位置，几弦几品
+  setFinger(svg, string = 6, fret = 0) {
+    if (+fret > 0 && +fret <= 5) {
+      svg.appendChild(this.createUse('#block_circle', 25 + 20 * (6 - string), 35 + 20 * fret))
+    }
+  }
 }
