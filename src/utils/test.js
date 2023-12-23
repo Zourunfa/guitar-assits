@@ -398,4 +398,43 @@ export class ChordSvg {
       svg.appendChild(this.createUse('#block_circle', 25 + 20 * (6 - string), 35 + 20 * fret))
     }
   }
+
+  // 设置大横按位置
+  setBarre(svg, stringTo, fret, barreFret) {
+    if (fret > 0 && fret <= 5) {
+      svg.appendChild(
+        this.createSVG('rect', {
+          className: 'chord-barre',
+          width: stringTo * 20,
+          x: 15 + 20 * (6 - stringTo),
+          y: 27 + 20 * fret,
+          rx: 8,
+          ry: 8,
+        })
+      )
+    }
+  }
+  // 设置把位偏移的数字提示
+  setFretOffset(svg, fret, fretOffset, isBarreCover) {
+    if (fret > 0) {
+      let text = this.createSVG('text', {
+        className: 'chord-barre-fret',
+        x: isBarreCover ? 1 : 8,
+        y: 40 + fret * 20,
+      })
+      text.innerHTML = fretOffset
+      svg.appendChild(text)
+    }
+  }
+  // 设置每根弦在按住和弦后的发音名
+  setStringKey(svg, string, keyName) {
+    let xFixed = keyName.length === 2 ? -4 : 0
+    let text = this.createSVG('text', {
+      className: 'chord-string-key',
+      x: 21.5 + 20 * (6 - string) + xFixed,
+      y: 160,
+    })
+    text.innerHTML = keyName
+    svg.appendChild(text)
+  }
 }
