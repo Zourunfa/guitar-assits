@@ -437,4 +437,18 @@ export class ChordSvg {
     text.innerHTML = keyName
     svg.appendChild(text)
   }
+
+  // 设置和弦名称
+  setChordName(svg, name = '') {
+    let xFixed = /\.\.\./.test(name) ? 10 : 0
+    let text = this.createSVG('text', {
+      className: 'chord-name',
+      x: 75 - name.toString().length * 7 + xFixed,
+      y: 20,
+    })
+    text.innerHTML = name
+
+    console.log(text.innerHTML, '--- text.innerHTML ')
+    svg.appendChild(text)
+  }
 }
