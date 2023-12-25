@@ -451,4 +451,71 @@ export class ChordSvg {
     console.log(text.innerHTML, '--- text.innerHTML ')
     svg.appendChild(text)
   }
+
+  // 初始化svg
+  initChordSvg() {
+    // svg元素
+    this.svg = this.createSVG('svg', {
+      className: 'chord-svg',
+      viewBox: '0 0 150 150',
+      preserveAspectRatio: 'xMidYMin meet',
+    })
+    // 和弦图方块
+    this.chordRect = this.createSVG('rect', {
+      className: 'chord-rect',
+      x: 25,
+      y: 45,
+      rx: 5,
+      ry: 5,
+    })
+    // 和弦网格，代表弦和品
+    this.chordGird = this.createSVG('path', {
+      className: 'chord-gird',
+      d: 'M25 65 L125 65 M25 85 L125 85 M25 105 L125 105 M25 125 L125 125 M45 45 L45 145 M65 45 L65 145 M85 45 L85 145 M105 45 L105 145 M25 40 L125 40',
+    })
+    // 用于放置可复用的svg元素
+    this.defs = this.createSVG('defs')
+    // 禁止按弦的叉号标志
+    this.g_forbidden = this.createSVG('g', {
+      id: 'forbidden',
+    })
+    this.g_forbidden.appendChild(
+      this.createSVG('path', {
+        className: 'chord-forbidden',
+        d: 'M-5 -5 L5 5 M-5 5 L5 -5',
+      })
+    )
+    // 空弦弹奏的空心圈标志
+    this.g_blank_circle = this.createSVG('g', {
+      id: 'blank_circle',
+    })
+    this.g_blank_circle.appendChild(
+      this.createSVG('circle', {
+        className: 'chord-blank-circle',
+        cx: 0,
+        cy: 0,
+        r: 6,
+      })
+    )
+    // 表示按弦位置的实心圈标志
+    this.g_block_circle = this.createSVG('g', {
+      id: 'block_circle',
+    })
+    this.g_block_circle.appendChild(
+      this.createSVG('circle', {
+        className: 'chord-block-circle',
+        cx: 0,
+        cy: 0,
+        r: 8,
+      })
+    )
+    // 可复用元素加入
+    this.defs.appendChild(this.g_forbidden)
+    this.defs.appendChild(this.g_blank_circle)
+    this.defs.appendChild(this.g_block_circle)
+    // svg子元素加入
+    this.svg.appendChild(this.chordRect)
+    this.svg.appendChild(this.chordGird)
+    this.svg.appendChild(this.defs)
+  }
 }
