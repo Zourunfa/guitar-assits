@@ -518,4 +518,66 @@ export class ChordSvg {
     this.svg.appendChild(this.chordGird)
     this.svg.appendChild(this.defs)
   }
+
+  // 绘制和弦svg图案
+  /*
+   * @param chordTone 和弦组成音数组
+   * @param chord 和弦指法结果
+   * @param target svg指法图dom容器
+   */
+  drawChord(chordTone, chord, target) {
+    // debugger
+    let svg = this.svg.cloneNode(true)
+
+    let fretArr = chord.map(item => item.fret).filter(fret => fret != null)
+    console.log(chord, '---chord')
+    // 和弦指法中出现的最高品格位置
+    let maxFret = Math.max.apply(null, fretArr)
+    // 和弦指法中出现的最低品位位置
+    let minFret = Math.min.apply(null, fretArr)
+    // svg指法图案的起始品格位置相对于吉他上0品位置的偏移量
+    let fretOffset = maxFret <= 5 ? 0 : minFret
+    // 记录指法最低品位可能需要大横按的按弦数
+    let barreCount = 0
+    // 大横按初始只横跨1弦到1弦（相当于没横按）
+    let barreStringTo = 1
+    // 实例化用于计算和弦名称的类
+    let chordName = new ChordName()
+    // 遍历和弦指法数组
+    chord.forEach(item => {
+      if (item.fret == null) {
+        // 某根弦没标记品格位置时禁止该弦弹奏
+        this.setForbidden(svg, item.string)
+      } else if (item.fret === 0) {
+        // 某根弦没标记的品格位置为0品时标记空弦弹奏
+        this.setOpen(svg, item.string)
+      } else {
+        // 剩下的指法绘制其对应的按法位置
+        this.setFinger(svg, item.string, fretOffset > 0 ? item.fret - fretOffset + 1 : item.fret)
+      }
+      // 当按在该和弦的最低品格位置的指法反复出现时
+      if (item.fret === minFret) {
+        // 计算大横按的跨度
+        barreStringTo = item.string > barreStringTo ? item.string : barreStringTo
+        // 计算大横按实际按弦的数量
+        barreCount++
+      }
+      // 在允许弹奏的弦的下方标记其对应的音名
+      if (item.fret != null) {
+        this.setStringKey(svg, item.string, chordName.getKeyName(item.key))
+      }
+    })
+    // 将真实的按弦品格位置转换为相对于svg图案上的品格位置
+    let relativeFret = fretOffset > 0 ? minFret - fretOffset + 1 : minFret
+    if (barreCount > 1) {
+      // 横按数大于1才需要使用大横按
+      this.setBarre(svg, barreStringTo, relativeFret, minFret)
+    }
+    // 在图案左侧绘制品格位置偏移标记
+    this.setFretOffset(svg, relativeFret, minFret, barreStringTo === 6)
+    // 在图案上侧绘制和弦名称
+    this.setChordName(svg, chordName.getChordName(chordTone))
+    // 将生成号的svg图案塞到指定结构中
+    target ? target.appendChild(svg) : document.body.appendChild(svg)
+  }
 }
