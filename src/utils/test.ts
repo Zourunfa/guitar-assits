@@ -17,5 +17,21 @@ export class Tone{
   sharp: string // 升半调标记
   octave: number
   position: { string?: number; fret?: number }
+
+
+  //   constructor(toneString: string = '1', string?: number, fret?: number) {
+//     this.toneString = toneString
+//     this.toneNormal = toneString.replace(/\./g, '')
+//     this.key = toneString.replace(/\.|b|#/g, '')
+//     this.syllableName = this.syllableMap[+this.key - 1]
+//     this.flat = toneString.match('b') ? 'b' : ''
+//     this.sharp = toneString.match('#') ? '#' : ''
+
+//     let octave_arr = toneString.split(this.key)
+//     let octave_flat = octave_arr[0].toString().match(/\./g)
+//     let octave_sharp = octave_arr[1].toString().match(/\./g)
+//     this.octave = (octave_sharp ? octave_sharp.length : 0) - (octave_flat ? octave_flat.length : 0)
+//     this.position = { string, fret }
+//   }
   }
 }
