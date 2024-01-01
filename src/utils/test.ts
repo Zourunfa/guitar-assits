@@ -4,9 +4,8 @@ export function is(data: any) {
   }
 }
 
-export class Tone{
-  constructor(toneString='1',string,fret){
-      syllableMap: string[] = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si'] //所有唱名数组
+export class Tone {
+  syllableMap: string[] = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si'] //所有唱名数组
   keyMap: (string | string[])[] = ['1', ['#1', 'b2'], '2', ['#2', 'b3'], '3', '4', ['#4', 'b5'], '5', ['#5', 'b6'], '6', ['#6', 'b7'], '7'] // 音程
   intervalMap: (string | string[])[] = ['C', ['#C', 'bD'], 'D', ['#D', 'bE'], 'E', 'F', ['#F', 'bG'], 'G', ['#G', 'bA'], 'A', ['#A', 'bB'], 'B'] //所有调名
   toneString: string // 单音的字符串表示
@@ -18,20 +17,30 @@ export class Tone{
   octave: number
   position: { string?: number; fret?: number }
 
+  constructor(toneString: string = '1', string?: number, fret?: number) {
+    this.toneString = toneString
+    this.toneNormal = toneString.replace(/\./g, '')
+    this.key = toneString.replace(/\.|b|#/g, '')
+    this.syllableName = this.syllableMap[+this.key - 1]
+    this.flat = toneString.match('b') ? 'b' : ''
+    this.sharp = toneString.match('#') ? '#' : ''
 
-  //   constructor(toneString: string = '1', string?: number, fret?: number) {
-//     this.toneString = toneString
-//     this.toneNormal = toneString.replace(/\./g, '')
-//     this.key = toneString.replace(/\.|b|#/g, '')
-//     this.syllableName = this.syllableMap[+this.key - 1]
-//     this.flat = toneString.match('b') ? 'b' : ''
-//     this.sharp = toneString.match('#') ? '#' : ''
+    let octave_arr = toneString.split(this.key)
+    let octave_flat = octave_arr[0].toString().match(/\./g)
+    let octave_sharp = octave_arr[1].toString().match(/\./g)
+    this.octave = (octave_sharp ? octave_sharp.length : 0) - (octave_flat ? octave_flat.length : 0)
+    this.position = { string, fret }
+  }
 
-//     let octave_arr = toneString.split(this.key)
-//     let octave_flat = octave_arr[0].toString().match(/\./g)
-//     let octave_sharp = octave_arr[1].toString().match(/\./g)
-//     this.octave = (octave_sharp ? octave_sharp.length : 0) - (octave_flat ? octave_flat.length : 0)
-//     this.position = { string, fret }
-//   }
+  findKeyIndex(keyString: string): number {
+    return this.keyMap.findIndex(item => {
+      if (Array.isArray(item)) {
+        return item.includes(keyString)
+      } else if (item === keyString) {
+        return true
+      } else {
+        return false
+      }
+    })
   }
 }
