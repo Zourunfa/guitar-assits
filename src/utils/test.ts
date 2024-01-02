@@ -15,9 +15,9 @@ export class Tone {
   flat: string // 降半调标记
   sharp: string // 升半调标记
   octave: number
-  position: { string?: number; fret?: number }
+  position: { string: number; fret: number }
 
-  constructor(toneString: string = '1', string?: number, fret?: number) {
+  constructor(toneString: string = '1', string: number, fret: number) {
     this.toneString = toneString
     this.toneNormal = toneString.replace(/\./g, '')
     this.key = toneString.replace(/\.|b|#/g, '')
@@ -32,6 +32,7 @@ export class Tone {
     this.position = { string, fret }
   }
 
+  //
   findKeyIndex(keyString: string): number {
     return this.keyMap.findIndex(item => {
       if (Array.isArray(item)) {
@@ -42,5 +43,42 @@ export class Tone {
         return false
       }
     })
+  }
+
+  step(num: number): Tone | null {
+    let keyString = this.flat + this.sharp + this.key
+    let len = this.keyMap.length
+    let index = this.findKeyIndex(keyString)
+
+    if (index > -1) {
+      num = +num
+      let nextIndex = parseInt((index + num).toString(), 0)
+      let octave = this.octave
+      let index_gap = nextIndex - len
+
+      if (nextIndex >= len) {
+        octave += Math.floor(index_gap / len) + 1
+        nextIndex = index_gap % len
+      } else if (nextIndex < 0) {
+        let index_gap = nextIndex
+        octave += Math.floor(index_gap / len)
+        nextIndex = (index_gap % len) + len
+      }
+
+      let nextKey = this.keyMap[nextIndex]
+      let octaveString = new Array(Math.abs(octave)).fill('.').join('')
+      let tongString = ''
+
+      if (!is(nextKey)('Array')) {
+        tongString = (octave < 0 ? octaveString : '') + nextKey + (octave > 0 ? octaveString : '')
+        return new Tone(this.toneString, this.position.string, this.position.fret + num)
+      } else {
+        return (nextKey as string[]).map(key => {
+          return new Tone((octave < 0 ? octaveString : '') + key + (octave > 0 ? octaveString : ''), this.position.string, this.position.fret + num) as Tone
+        })
+      }
+    } else {
+      return null
+    }
   }
 }
