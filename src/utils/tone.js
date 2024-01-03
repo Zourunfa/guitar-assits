@@ -76,6 +76,11 @@ export class Tone {
     }
   }
 }
+let tone = new Tone('1')
+
+console.log(tone, '---tone')
+console.log(tone.findKeyIndex('#5'))
+console.log(tone.step(5))
 
 // 吉他和弦推导类
 export class GuitarChord {
