@@ -244,17 +244,17 @@
 //       },
 //     ]
 
-//     if (chordTone.length === 3) {
-//       suffixArr = chord3SuffixMap.filter(item => {
-//         return item.fn.bind(this, chordTone)()
-//       })
-//       suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
-//     } else {
-//       suffixArr = chord4SuffixMap.filter(item => {
-//         return item.fn.bind(this, chordTone)()
-//       })
-//       suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
-//     }
+// if (chordTone.length === 3) {
+//   suffixArr = chord3SuffixMap.filter(item => {
+//     return item.fn.bind(this, chordTone)()
+//   })
+//   suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
+// } else {
+//   suffixArr = chord4SuffixMap.filter(item => {
+//     return item.fn.bind(this, chordTone)()
+//   })
+//   suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
+// }
 
 //     return chordRootName + suffix
 //   }

@@ -9,7 +9,7 @@
       <p>{{ chordTone }}</p>
 
       <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
-      <p class="chord-name">当前和弦名：{{ chordName }}</p>
+      <!-- <p class="chord-name">当前和弦名：{{ chordName }}</p> -->
       <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
     </div>
   </div>
@@ -105,14 +105,26 @@ const generateChordName = () => {
 }
 
 const clearNoteCircle = currentLine => {
-  console.log(currentLine)
   const circle = document.querySelectorAll(`.line${currentLine}`)
-  console.log(circle)
   if (circle) {
     for (let i = 0; i < circle.length; i++) {
       circle[i].parentNode.removeChild(circle[i])
     }
   }
+}
+
+const clearSameCircle = (i, j) => {
+  const circle = document.querySelectorAll(`.line${i}${j}`)
+
+  console.log(circle, '--circle')
+
+  if (circle.length > 0) {
+    for (let i = 0; i < circle.length; i++) {
+      circle[i].parentNode.removeChild(circle[i])
+    }
+    return 'stop'
+  }
+  // return false
 }
 function createFingerSvg() {
   // 创建一个SVG元素
@@ -170,12 +182,15 @@ function createFingerSvg() {
         // 先清除一条琴弦上的手指点和音名
         clearNoteCircle(i)
 
+        // 清除重复点击的点
+        // clearSameCircle(i, j)
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         marker.setAttribute('cx', (x + 50).toString())
         marker.setAttribute('cy', y.toString()) // 使圆点位于中央
         marker.setAttribute('r', '5')
         marker.setAttribute('fill', 'black')
         marker.setAttribute('class', `line${i}`)
+        marker.setAttribute('class', `line${i}${j}`)
         svg.appendChild(marker)
         currentNote.value = fret.getAttribute('data-set-musicId')
         chordNotes.value[i] = currentNote.value
@@ -185,6 +200,7 @@ function createFingerSvg() {
         noteText.setAttribute('x', x.toString())
         noteText.setAttribute('y', (y + 20).toString()) // 适当调整位置以避免重叠
         noteText.setAttribute('class', `line${i}`)
+        noteText.setAttribute('class', `line${i}${j}`)
         noteText.setAttribute('text-anchor', 'red')
         noteText.textContent = `音名${currentNote.value}` // 请替换为实际的音名
         svg.appendChild(noteText)

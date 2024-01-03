@@ -15,7 +15,7 @@ const activeName = ref('1')
 
 <template>
   <div class="container">
-    <!-- <el-tabs v-model="activeName" class="demo-tabs">
+    <el-tabs v-model="activeName" class="demo-tabs">
       <el-tab-pane label="指法推导和弦名" name="1">
         <Fingering></Fingering>
       </el-tab-pane>
@@ -23,7 +23,7 @@ const activeName = ref('1')
         <ChordSelect ref="chordSelect" @draw-chord="handleDrawChord"></ChordSelect>
         <ChordDraw ref="chordDraw" />
       </el-tab-pane>
-    </el-tabs> -->
+    </el-tabs>
   </div>
 </template>
 
