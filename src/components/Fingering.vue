@@ -115,15 +115,13 @@ const clearNoteCircle = currentLine => {
 
 const clearSameCircle = (i, j) => {
   const circle = document.querySelectorAll(`.line${i}${j}`)
-
-  console.log(circle, '--circle')
-
   if (circle.length > 0) {
-    for (let i = 0; i < circle.length; i++) {
-      circle[i].parentNode.removeChild(circle[i])
+    for (let q = 0; q < circle.length; q++) {
+      circle[q].parentNode.removeChild(circle[q])
     }
     return 'stop'
   }
+  return 'go'
   // return false
 }
 function createFingerSvg() {
@@ -183,7 +181,12 @@ function createFingerSvg() {
         clearNoteCircle(i)
 
         // 清除重复点击的点
-        // clearSameCircle(i, j)
+        let isStop = clearSameCircle(i, j)
+
+        if (isStop === 'stop') {
+          chordNotes.value.pop()
+          return
+        }
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         marker.setAttribute('cx', (x + 50).toString())
         marker.setAttribute('cy', y.toString()) // 使圆点位于中央
