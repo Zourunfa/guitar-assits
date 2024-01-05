@@ -1,3 +1,4 @@
+import { GuitarChord } from './tone'
 export function is(data: any) {
   return function (type: string) {
     return Object.prototype.toString.call(data) === `[object ${type}]`
@@ -265,3 +266,29 @@ export class ChordName {
 var chordName = new ChordName()
 console.log(chordName, '---chordName')
 console.log(chordName.getChordName(['1', '3', '5']))
+
+export class GuitarChord {
+  fretLength: number
+  initialTone: Tone[]
+  toneMap: Tone[][]
+
+  chordTone: string[]
+  rootTone: string
+  chordResult: any[]
+
+  constructor() {
+    // 吉他的最大品格数量
+    this.fretLength = 15
+    // 构建1到6弦的初始音
+    this.initialTone = [new Tone('3.', 1, 0), new Tone('7', 2, 0), new Tone('5', 3, 0), new Tone('2', 4, 0), new Tone('.6', 5, 0), new Tone('.3', 6, 0)]
+    // 用于吉他上所有位置对应的音
+    this.toneMap = []
+    // 从1到6弦，从品数的低到高，依次计算每个位置的音
+    for (let string = 1; string <= this.initialTone.length; string++) {
+      this.toneMap[string] = []
+      for (let fret = 0; fret <= this.fretLength; fret++) {
+        this.toneMap[string].push(this.initialTone[string - 1].step(fret))
+      }
+    }
+  }
+}
