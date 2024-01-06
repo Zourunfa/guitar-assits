@@ -117,6 +117,9 @@ const clearSameCircle = (i, j) => {
   const circle = document.querySelectorAll(`.line${i}${j}`)
   if (circle.length > 0) {
     for (let q = 0; q < circle.length; q++) {
+      if (circle[q].getAttribute('data-set-musicId')) {
+        chordTone.value.forEach(item => {})
+      }
       circle[q].parentNode.removeChild(circle[q])
     }
     return 'stop'
@@ -182,11 +185,10 @@ function createFingerSvg() {
 
         // 清除重复点击的点
         let isStop = clearSameCircle(i, j)
-
-        if (isStop === 'stop') {
-          chordNotes.value.pop()
+        if (isStop == 'stop') {
           return
         }
+
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         marker.setAttribute('cx', (x + 50).toString())
         marker.setAttribute('cy', y.toString()) // 使圆点位于中央
