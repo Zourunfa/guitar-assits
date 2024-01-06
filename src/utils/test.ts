@@ -291,4 +291,10 @@ export class GuitarChord {
       }
     }
   }
+
+  findFret(key: string, toneArray: Tone[], fretStart = 0, fretEnd?: number): number[] {
+    key = key.replace(/\./g, '')
+
+    let fretArray: number[] = []
+  }
 }
