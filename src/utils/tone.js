@@ -486,6 +486,7 @@ export class ChordName {
       suffixArr = chord3SuffixMap.filter(item => {
         return item.fn.bind(this, chordTone)()
       })
+      console.log(suffixArr, '---suffixArr')
       suffix = suffixArr.length > 0 ? suffixArr[0].suffix : suffix
     } else {
       suffixArr = chord4SuffixMap.filter(item => {

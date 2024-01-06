@@ -9,7 +9,7 @@
       <p>{{ chordTone }}</p>
 
       <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
-      <p class="chord-name">当前和弦名：{{ chordName }}</p>
+      <!-- <p class="chord-name">当前和弦名：{{ chordName }}</p> -->
       <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
     </div>
   </div>
@@ -19,7 +19,8 @@
 import { ref, onMounted } from 'vue'
 // @ts-ignore
 import { ChordName } from '../utils/tone.js'
-
+import { arraysAreEqual, uniqueArray } from '../utils/tools/index'
+const INITIAL_CHORDS = ['E4', 'B3', 'G3', 'D3', 'A2', 'E2']
 const chordNotes = ref(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
 const currentNote = ref('')
 const chordTone = ref(null)
@@ -64,9 +65,7 @@ const getDistinctNotes = notes => {
   const noteSet = new Set()
 
   notes.forEach(note => {
-    console.log(note, '---note')
     const noteName = note.slice(0, note.length - 1)
-    console.log(noteName, '---noteName')
     if (!noteSet.has(noteName)) {
       noteSet.add(noteName)
     }
@@ -89,30 +88,54 @@ const distinctNotesWithNames = notes => {
 }
 
 const generateChordName = () => {
-  // chordTone.value = customSort(chordNotes.value)
-  console.log(chordNotes.value, '---chordNotes.value')
+  if (arraysAreEqual(chordNotes.value, INITIAL_CHORDS)) {
+    chordNameList.value = []
+    return
+  }
   chordTone.value = distinctNotesWithNames(chordNotes.value)
-  console.log(chordTone.value, '--- chordTone.value')
   chordToneList.value = permute(chordTone.value)
-  console.log(chordToneList.value, '----chordToneList.value')
-
   chordNameList.value = chordToneList.value.map(notes => {
-    // let noteStr = new ChordName().getChordName(notes)
-
     return new ChordName().getChordName(notes)
   })
+
   chordName.value = new ChordName().getChordName(chordTone.value)
+
+  // 去重
+  chordNameList.value = uniqueArray(chordNameList.value)
 }
 
 const clearNoteCircle = currentLine => {
-  console.log(currentLine)
-  const circle = document.querySelectorAll(`.line${currentLine}`)
-  console.log(circle)
+  const circle = document.querySelectorAll(`#line${currentLine}`)
+
+  console.log(circle, '---circle1')
   if (circle) {
     for (let i = 0; i < circle.length; i++) {
       circle[i].parentNode.removeChild(circle[i])
     }
   }
+}
+
+// 重复点击品格 取消此次点击
+const clearSameCircle = (i, j) => {
+  const circle = document.querySelectorAll(`.line${i}${j}`)
+  console.log(circle, '---circle2')
+  if (circle.length > 0) {
+    for (let q = 0; q < circle.length; q++) {
+      if (circle[q].getAttribute('data-set-musicId')) {
+        chordNotes.value.forEach(chord => {
+          if (chord == circle[q].getAttribute('data-set-musicId')) {
+            // 复原空弦音
+            chordNotes.value[i] = INITIAL_CHORDS[i]
+          }
+        })
+      }
+      circle[q].parentNode.removeChild(circle[q])
+      generateChordName()
+    }
+    return 'stop'
+  }
+  return 'go'
+  // return false
 }
 function createFingerSvg() {
   // 创建一个SVG元素
@@ -167,6 +190,12 @@ function createFingerSvg() {
 
       // 添加点击事件来生成黑点和音名
       fret.addEventListener('click', () => {
+        // 清除重复点击的点
+        let isStop = clearSameCircle(i, j)
+        if (isStop == 'stop') {
+          return
+        }
+
         // 先清除一条琴弦上的手指点和音名
         clearNoteCircle(i)
 
@@ -175,7 +204,8 @@ function createFingerSvg() {
         marker.setAttribute('cy', y.toString()) // 使圆点位于中央
         marker.setAttribute('r', '5')
         marker.setAttribute('fill', 'black')
-        marker.setAttribute('class', `line${i}`)
+        marker.setAttribute('id', `line${i}`)
+        marker.setAttribute('class', `line${i}${j}`)
         svg.appendChild(marker)
         currentNote.value = fret.getAttribute('data-set-musicId')
         chordNotes.value[i] = currentNote.value
@@ -184,8 +214,10 @@ function createFingerSvg() {
         const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         noteText.setAttribute('x', x.toString())
         noteText.setAttribute('y', (y + 20).toString()) // 适当调整位置以避免重叠
-        noteText.setAttribute('class', `line${i}`)
+        noteText.setAttribute('id', `line${i}`)
+        noteText.setAttribute('class', `line${i}${j}`)
         noteText.setAttribute('text-anchor', 'red')
+        noteText.setAttribute('data-set-musicId', currentNote.value)
         noteText.textContent = `音名${currentNote.value}` // 请替换为实际的音名
         svg.appendChild(noteText)
         // 生成和弦名
