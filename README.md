@@ -2,7 +2,7 @@
 
 (Under design, not yet perfected)
 
-https://zourunfa.github.io/guitar-assist/  
+https://zourunfa.github.io/guitar-elf/
 
 to learing guitar base theory with coding
   
