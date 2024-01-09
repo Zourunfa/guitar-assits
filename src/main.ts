@@ -4,9 +4,8 @@ import App from './App.vue'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
-import './utils/test.ts'
-import './utils/tone.js'
-import './utils/test.js'
+import './utils/tone.ts'
+
 const app = createApp(App)
 
 app.use(ElementPlus)
