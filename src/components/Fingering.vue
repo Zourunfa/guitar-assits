@@ -40,7 +40,7 @@ const guitarNotes = [
 
 // 全排列
 const permute = arr => {
-  const result = []
+  const result: any = []
 
   function generatePermutations(currentArr, remainingArr) {
     if (remainingArr.length === 0) {
@@ -129,7 +129,7 @@ const clearSameCircle = (i, j) => {
           }
         })
       }
-      circle[q].parentNode.removeChild(circle[q])
+      circle[q]!.parentNode.removeChild(circle[q])
       generateChordName()
     }
     return 'stop'
@@ -207,7 +207,7 @@ function createFingerSvg() {
         marker.setAttribute('id', `line${i}`)
         marker.setAttribute('class', `line${i}${j}`)
         svg.appendChild(marker)
-        currentNote.value = fret.getAttribute('data-set-musicId')
+        currentNote.value = fret.getAttribute('data-set-musicId') as string
         chordNotes.value[i] = currentNote.value
 
         // 添加音名
@@ -230,7 +230,7 @@ function createFingerSvg() {
 
   // const beforeNode = document.querySelector('.current-notes')
   // 将SVG添加到页面中
-  document.querySelector('.finger-pannel').append(svg)
+  document.querySelector('.finger-pannel')!.append(svg)
 }
 onMounted(() => {
   createFingerSvg()
