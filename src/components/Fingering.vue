@@ -61,7 +61,7 @@ const permute = arr => {
   return result
 }
 
-const getDistinctNotes = notes => {
+const getDistinctNotes = (notes: string[]): string[] => {
   const noteSet = new Set()
 
   notes.forEach(note => {
@@ -76,7 +76,7 @@ const getDistinctNotes = notes => {
 function unique(arr) {
   return Array.from(new Set(arr))
 }
-const distinctNotesWithNames = notes => {
+const distinctNotesWithNames = (notes: string[]): string[] => {
   const distinctNotes = getDistinctNotes(notes)
 
   let res = distinctNotes.map(note => {
@@ -110,7 +110,7 @@ const clearNoteCircle = currentLine => {
   console.log(circle, '---circle1')
   if (circle) {
     for (let i = 0; i < circle.length; i++) {
-      circle[i].parentNode.removeChild(circle[i])
+      circle[i].parentNode!.removeChild(circle[i])
     }
   }
 }
@@ -129,7 +129,7 @@ const clearSameCircle = (i, j) => {
           }
         })
       }
-      circle[q]!.parentNode.removeChild(circle[q])
+      circle[q].parentNode!.removeChild(circle[q])
       generateChordName()
     }
     return 'stop'
