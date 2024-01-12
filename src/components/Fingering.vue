@@ -40,9 +40,9 @@ const guitarNotes = [
 
 // 全排列
 const permute = arr => {
-  const result: any = []
+  const result: string[][] = []
 
-  function generatePermutations(currentArr, remainingArr) {
+  function generatePermutations(currentArr: string[], remainingArr: string[]) {
     if (remainingArr.length === 0) {
       result.push(currentArr.slice()) // 添加当前排列到结果数组
       return
@@ -62,9 +62,9 @@ const permute = arr => {
 }
 
 const getDistinctNotes = (notes: string[]): string[] => {
-  const noteSet = new Set()
+  const noteSet: Set<string> = new Set()
 
-  notes.forEach(note => {
+  notes.forEach((note: string) => {
     const noteName = note.slice(0, note.length - 1)
     if (!noteSet.has(noteName)) {
       noteSet.add(noteName)
@@ -73,9 +73,7 @@ const getDistinctNotes = (notes: string[]): string[] => {
 
   return Array.from(noteSet)
 }
-function unique(arr) {
-  return Array.from(new Set(arr))
-}
+
 const distinctNotesWithNames = (notes: string[]): string[] => {
   const distinctNotes = getDistinctNotes(notes)
 
@@ -84,7 +82,7 @@ const distinctNotesWithNames = (notes: string[]): string[] => {
     return keyMap[index]
   })
 
-  return unique(res)
+  return uniqueArray(res)
 }
 
 const generateChordName = () => {
