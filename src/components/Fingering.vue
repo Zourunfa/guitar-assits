@@ -7,9 +7,6 @@
       <p class="current-notes">现有六根弦各自音名： {{ chordNotes }}</p>
 
       <p>{{ chordTone }}</p>
-
-      <!-- <el-button @click="generateChordName" type="primary">生成和弦名</el-button> -->
-      <!-- <p class="chord-name">当前和弦名：{{ chordName }}</p> -->
       <p class="chord-name">不同根音可能的和弦名：{{ chordNameList }}</p>
     </div>
   </div>
@@ -20,15 +17,15 @@ import { ref, onMounted } from 'vue'
 // @ts-ignore
 import { ChordName } from '../utils/tone.ts'
 import { arraysAreEqual, uniqueArray } from '../utils/tools/index'
-const INITIAL_CHORDS = ['E4', 'B3', 'G3', 'D3', 'A2', 'E2']
-const chordNotes = ref(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
-const currentNote = ref('')
-const chordTone = ref(null)
-const chordName = ref('')
+const INITIAL_CHORDS: string[] = ['E4', 'B3', 'G3', 'D3', 'A2', 'E2']
+const chordNotes = ref<string[]>(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
+const currentNote = ref<string>('')
+const chordTone = ref<string[]>([])
+const chordName = ref<string>('')
 const keyMap = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
 const keyMapEn = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
-const chordToneList = ref([])
-const chordNameList = ref([])
+const chordToneList = ref<string[][]>([])
+const chordNameList = ref<string[]>([])
 const guitarNotes = [
   ['E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5'],
   ['B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5'],
@@ -116,7 +113,7 @@ const clearNoteCircle = currentLine => {
 // 重复点击品格 取消此次点击
 const clearSameCircle = (i, j) => {
   const circle = document.querySelectorAll(`.line${i}${j}`)
-  console.log(circle, '---circle2')
+
   if (circle.length > 0) {
     for (let q = 0; q < circle.length; q++) {
       if (circle[q].getAttribute('data-set-musicId')) {
