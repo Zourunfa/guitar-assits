@@ -26,7 +26,7 @@ const keyMap = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5
 const keyMapEn = ['C', 'C#', 'Db', 'D', 'D#', 'Eb', 'E', 'F', 'F#', 'Gb', 'G', 'G#', 'Ab', 'A', 'A#', 'Bb', 'B']
 const chordToneList = ref<string[][]>([])
 const chordNameList = ref<string[]>([])
-const guitarNotes = [
+const guitarNotes: string[][] = [
   ['E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5'],
   ['B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4', 'C5', 'C#5', 'D5'],
   ['G3', 'G#3', 'A3', 'A#3', 'B3', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4'],
@@ -82,7 +82,7 @@ const distinctNotesWithNames = (notes: string[]): string[] => {
   return uniqueArray(res)
 }
 
-const generateChordName = () => {
+const generateChordName = (): void => {
   if (arraysAreEqual(chordNotes.value, INITIAL_CHORDS)) {
     chordNameList.value = []
     return
@@ -99,7 +99,7 @@ const generateChordName = () => {
   chordNameList.value = uniqueArray(chordNameList.value)
 }
 
-const clearNoteCircle = currentLine => {
+const clearNoteCircle = (currentLine: number): void => {
   const circle = document.querySelectorAll(`#line${currentLine}`)
 
   console.log(circle, '---circle1')
@@ -111,7 +111,7 @@ const clearNoteCircle = currentLine => {
 }
 
 // 重复点击品格 取消此次点击
-const clearSameCircle = (i, j) => {
+const clearSameCircle = (i: number, j: number): string => {
   const circle = document.querySelectorAll(`.line${i}${j}`)
 
   if (circle.length > 0) {
@@ -132,7 +132,7 @@ const clearSameCircle = (i, j) => {
   return 'go'
   // return false
 }
-function createFingerSvg() {
+function createFingerSvg(): void {
   // 创建一个SVG元素
   const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
   svg.setAttribute('class', 'finger-panel')
