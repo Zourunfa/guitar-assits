@@ -232,7 +232,7 @@ function chordCountChange(count: number) {
 }
 .select-notify {
   line-height: 50px;
-  color: #ddd;
+  color: #fff;
   font-size: 13px;
   text-align: center;
 }

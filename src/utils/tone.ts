@@ -659,6 +659,11 @@ export class ChordSvg {
   // 初始化svg
   private initChordSvg(): void {
     // svg元素
+
+    /**
+     * viewBox: '0 0 150 150'：定义SVG内容的坐标系统和纵横比。在这种情况下，
+     * viewBox设置为'0 0 150 150'，表示SVG内容将在一个150x150单位的坐标系统内。
+     */
     this.svg = this.createSVG('svg', {
       className: 'chord-svg',
       viewBox: '0 0 150 150',
