@@ -84,19 +84,12 @@ const randomOne = (arr: string[]): string => {
 const draw = (chordTone: string) => {
   // debugger
   const chord = new GuitarChord()
-  console.log(chord, '----chord1')
-  console.log(chordTone, '----chordTone')
+
   const chordName = new ChordName().getChordName(chordTone)
   const chordResult = chord.chord(chordTone)
   const svg = new ChordSvg()
   const container = document.getElementById('chord_draw')
   if (container) container.innerHTML = ''
-
-  setTimeout(() => {
-    // Assuming hideLoading is an emit event from a parent component or a store action
-    // If it's a method, you can directly call it here.
-    // this.$emit('hideLoading')
-  }, 200)
 
   setTimeout(() => {
     if (chordResult.length === 0) {
