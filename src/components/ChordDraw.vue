@@ -9,10 +9,11 @@
 import { ref } from 'vue'
 //@ts-ignore
 import { GuitarChord, ChordName, ChordSvg } from '../utils/tone.ts'
+import InfoMessageType from '../types/index.ts'
 
 const info = ref('')
 
-const infoMessages = {
+const infoMessages: InfoMessageType = {
   hasAnswer: [
     '你没看错，这是和弦',
     'bingo',
@@ -81,10 +82,10 @@ const randomOne = (arr: string[]): string => {
   return arr[Math.floor(Math.random() * arr.length)]
 }
 
-const draw = (chordTone: string) => {
+const draw = (chordTone: string[]) => {
   // debugger
   const chord = new GuitarChord()
-
+  console.log(chordTone, '-----chordTone')
   const chordName = new ChordName().getChordName(chordTone)
   const chordResult = chord.chord(chordTone)
   const svg = new ChordSvg()
@@ -100,7 +101,7 @@ const draw = (chordTone: string) => {
       info.value = randomOne(infoMessages.hasAnswer)
     }
     chordResult.forEach((chordItem: any) => {
-      svg.drawChord(chordTone, chordItem, document.getElementById('chord_draw'))
+      svg.drawChord(chordTone, chordItem, document.getElementById('chord_draw') as HTMLElement)
     })
   }, 500)
 }
