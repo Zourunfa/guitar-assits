@@ -17,3 +17,10 @@ export function arraysAreEqual<T>(arr1: T[], arr2: T[]): boolean {
 export function uniqueArray<T>(arr: T[]): T[] {
   return Array.from(new Set(arr))
 }
+
+// 判断类型
+export function is(data: any) {
+  return function (type: string) {
+    return Object.prototype.toString.call(data) === `[object ${type}]`
+  }
+}

@@ -102,7 +102,6 @@ const generateChordName = (): void => {
 const clearNoteCircle = (currentLine: number): void => {
   const circle = document.querySelectorAll(`#line${currentLine}`)
 
-  console.log(circle, '---circle1')
   if (circle) {
     for (let i = 0; i < circle.length; i++) {
       circle[i].parentNode!.removeChild(circle[i])

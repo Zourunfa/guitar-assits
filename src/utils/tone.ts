@@ -1,8 +1,4 @@
-export function is(data: any) {
-  return function (type: string) {
-    return Object.prototype.toString.call(data) === `[object ${type}]`
-  }
-}
+import { is } from './tools/index'
 
 export class Tone {
   syllableMap: string[] = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si'] //所有唱名数组
@@ -183,7 +179,7 @@ export class ChordName {
     let rootKey = chordTone[0]
     let chordRootName = this.getKeyName(rootKey)
     let suffix = '...'
-    let suffixArr = []
+    let suffixArr: any[] = []
 
     let chord3SuffixMap = [
       {
