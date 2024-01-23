@@ -8,7 +8,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 //@ts-ignore
-import { GuitarChord, ChordName, ChordSvg } from '../utils/tone.ts'
+import { GuitarChord, ChordName, ChordSvg } from '../utils/chordComputed'
 import InfoMessageType from '../types/index.ts'
 
 const info = ref('')

@@ -1,4 +1,4 @@
-import { is } from '../tools/index'
+import { is } from '../../tools/index'
 import { PositionType } from './type/index'
 
 // 生成一个单音，此音的映射查询与音高的改变，同时可标记记录其在吉他上的位置

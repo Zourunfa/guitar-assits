@@ -15,8 +15,8 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 // @ts-ignore
-import { ChordName } from '../utils/tone.ts'
-import { arraysAreEqual, uniqueArray } from '../utils/tools/index'
+import { ChordName } from '../utils/chordComputed'
+import { arraysAreEqual, uniqueArray } from '../utils/tools'
 const INITIAL_CHORDS: string[] = ['E4', 'B3', 'G3', 'D3', 'A2', 'E2']
 const chordNotes = ref<string[]>(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
 const currentNote = ref<string>('')
