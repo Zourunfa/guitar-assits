@@ -10,3 +10,11 @@ interface PositionType {
   string: number
   fret: number
 }
+interface NormalObject {
+  [key: string]: any
+}
+interface StateInterface {
+  [key: string]: any
+  chordTone: string[]
+  type: number
+}

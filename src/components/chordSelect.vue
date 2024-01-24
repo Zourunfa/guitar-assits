@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
-
-interface NormalObject {
-  [key: string]: any
-}
+import { NormalObject, StateInterface } from '../types/index'
 
 const keyMap: string[] = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
 const emits = defineEmits(['drawChord'])
-interface StateInterface {
-  [key: string]: any
-  chordTone: string[]
-  type: number
-}
+
 const state: StateInterface = reactive({
   chordTone: ['1', '3', '5'],
   type: 3,
