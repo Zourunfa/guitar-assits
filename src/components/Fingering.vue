@@ -3,6 +3,8 @@
     <h2 class="panel-title">模拟15品吉他纸板</h2>
     <p class="tip">通过点击琴弦品格获取想要知道的和弦名</p>
     <div class="finger-pannel"></div>
+    <el-button @click="resetFinger" class="reset-btn">重置</el-button>
+
     <div class="finger-control">
       <p class="current-notes">现有六根弦各自音名： {{ chordNotes }}</p>
 
@@ -35,6 +37,21 @@ const guitarNotes: string[][] = [
   ['E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3'],
 ]
 
+const resetFinger = () => {
+  currentNote.value = ''
+  chordNotes.value = INITIAL_CHORDS
+  chordTone.value = []
+  chordNameList.value = []
+  const circles = document.querySelectorAll('circle')
+  const texts = document.querySelectorAll('text')
+  for (let i = 0; i < texts.length; i++) {
+    texts[i].parentNode!.removeChild(texts[i])
+  }
+
+  for (let i = 0; i < circles.length; i++) {
+    circles[i].parentNode!.removeChild(circles[i])
+  }
+}
 // 全排列
 const permute = arr => {
   const result: string[][] = []
@@ -270,6 +287,9 @@ onMounted(() => {
   font-size: 30px;
 }
 
+.reset-btn {
+  margin-top: 50px;
+}
 @media screen and (max-width: 1500px) {
   .finger-pannel {
     transform: scale(80%);
