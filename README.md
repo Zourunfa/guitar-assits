@@ -17,8 +17,8 @@ There are two main functions as follows:
 #Todos:
 
 
-- []  Finger:  reseting and clear all clicks
+- [ ]  Finger:  reseting and clear all clicks
 
-- []  Finger:  List the root and constituent notes of the generated chords
+- [ ]  Finger:  List the root and constituent notes of the generated chords
 
-- []  Finger:  make the click point with a finger img
+- [ ]  Finger:  make the click point with a finger img
