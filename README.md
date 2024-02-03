@@ -20,3 +20,5 @@ There are two main functions as follows:
 1. Finger:  reseting and clear all clicks
 
 2. Finger:  List the root and constituent notes of the generated chords
+
+3. style:  Finger and chordPanel 's style'
