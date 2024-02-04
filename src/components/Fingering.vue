@@ -37,6 +37,7 @@ const guitarNotes: string[][] = [
   ['E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2', 'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3'],
 ]
 
+// 重置面板
 const resetFinger = () => {
   currentNote.value = ''
   chordNotes.value = INITIAL_CHORDS
@@ -116,6 +117,7 @@ const generateChordName = (): void => {
   chordNameList.value = uniqueArray(chordNameList.value)
 }
 
+// 每一根琴弦只能有一个手指
 const clearNoteCircle = (currentLine: number): void => {
   const circle = document.querySelectorAll(`#line${currentLine}`)
 
@@ -190,12 +192,14 @@ function createFingerSvg(): void {
 
       // 添加 hover 效果到品格
       fret.addEventListener('mouseenter', () => {
-        fret.setAttribute('stroke', 'yellowgreen') // 鼠标悬停时改变颜色
+        // 鼠标悬停时改变颜色
+        fret.setAttribute('stroke', 'yellowgreen')
         fret.setAttribute('stroke-width', '6')
       })
 
       fret.addEventListener('mouseleave', () => {
-        fret.setAttribute('stroke', 'black') // 鼠标离开时恢复颜色
+        // 鼠标离开时恢复颜色
+        fret.setAttribute('stroke', 'black')
         fret.setAttribute('stroke-width', '4')
       })
 
@@ -212,7 +216,8 @@ function createFingerSvg(): void {
 
         const marker = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
         marker.setAttribute('cx', (x + 50).toString())
-        marker.setAttribute('cy', y.toString()) // 使圆点位于中央
+        // 使圆点位于中央
+        marker.setAttribute('cy', y.toString())
         marker.setAttribute('r', '5')
         marker.setAttribute('fill', 'black')
         marker.setAttribute('id', `line${i}`)
@@ -224,12 +229,14 @@ function createFingerSvg(): void {
         // 添加音名
         const noteText = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         noteText.setAttribute('x', x.toString())
-        noteText.setAttribute('y', (y + 20).toString()) // 适当调整位置以避免重叠
+        // 适当调整位置以避免重叠
+        noteText.setAttribute('y', (y + 20).toString())
         noteText.setAttribute('id', `line${i}`)
         noteText.setAttribute('class', `line${i}${j}`)
         noteText.setAttribute('text-anchor', 'red')
         noteText.setAttribute('data-set-musicId', currentNote.value)
-        noteText.textContent = `音名${currentNote.value}` // 请替换为实际的音名
+        // 请替换为实际的音名
+        noteText.textContent = `音名${currentNote.value}`
         svg.appendChild(noteText)
         // 生成和弦名
         generateChordName()
