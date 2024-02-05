@@ -1,3 +1,4 @@
+import { Tone } from '../tone/index'
 export class GuitarChord {
   fretLength: number
   initialTone: Tone[]

@@ -9,7 +9,7 @@
 import { ref } from 'vue'
 //@ts-ignore
 import { GuitarChord, ChordName, ChordSvg } from '../utils/chordComputed'
-import InfoMessageType from '../types/index.ts'
+import { InfoMessageType } from '../types/index'
 
 const info = ref('')
 
