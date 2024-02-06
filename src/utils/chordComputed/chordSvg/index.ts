@@ -1,3 +1,5 @@
+import { ChordName } from '../chordName/index'
+
 export class ChordSvg {
   private SVG_NS: string
   private XLINK_NS: string
@@ -23,12 +25,12 @@ export class ChordSvg {
       svgHref: this.XLINK_NS,
     }
     this.initChordSvg()
-    this.minFret = 0
+    // this.minFret = 0
   }
 
   // 创建svg相关元素
-  private createSVG(tag: string, attributes: Record<string, any>): SVGElement {
-    let elem = document.createElementNS(this.SVG_NS, tag)
+  private createSVG(tag: string, attributes?: Record<string, any>): SVGElement {
+    let elem = document.createElementNS(this.SVG_NS, tag) as SVGElement
 
     for (let attribute in attributes) {
       let name = attribute in this.ATTR_MAP ? this.ATTR_MAP[attribute] : attribute
@@ -71,7 +73,8 @@ export class ChordSvg {
   }
 
   // 设置大横按位置
-  private setBarre(svg: SVGElement, stringTo: number, fret: number, barreFret: number): void {
+  //  barreFret: number
+  private setBarre(svg: SVGElement, stringTo: number, fret: number): void {
     if (fret > 0 && fret <= 5) {
       svg.appendChild(
         this.createSVG('rect', {

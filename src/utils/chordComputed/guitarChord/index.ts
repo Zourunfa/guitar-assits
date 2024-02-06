@@ -210,12 +210,12 @@ export class GuitarChord {
   }
 
   // 和弦指法计算入口
-  chord(): any[] {
+  chord(ActualChordTone): any[] {
     // debugger
     let chordTone
 
-    if (Array.isArray(arguments[0])) {
-      chordTone = arguments[0]
+    if (Array.isArray(ActualChordTone)) {
+      chordTone = ActualChordTone
     } else {
       chordTone = Array.prototype.slice.apply(arguments).map(item => {
         let tone = new Tone(item.toString())
