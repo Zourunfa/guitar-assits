@@ -263,7 +263,8 @@ export class ChordSvg {
     let relativeFret = fretOffset > 0 ? minFret - fretOffset + 1 : minFret
     if (barreCount > 1) {
       // 横按数大于1才需要使用大横按
-      this.setBarre(svg, barreStringTo, relativeFret, minFret)
+      //  this.setBarre(svg, barreStringTo, relativeFret, minFret)
+      this.setBarre(svg, barreStringTo, relativeFret)
     }
     // 在图案左侧绘制品格位置偏移标记
     this.setFretOffset(svg, relativeFret, minFret, barreStringTo === 6)

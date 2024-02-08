@@ -45,7 +45,7 @@ export class GuitarChord {
     fretEnd = fretEnd ? fretEnd + 1 : toneArray.length
     for (let i = fretStart; i < fretEnd; i++) {
       if (Array.isArray(toneArray[i])) {
-        let toneStringArray = toneArray[i].map(item => {
+        let toneStringArray = (toneArray[i] as any).map(item => {
           return item.toneNormal
         })
         if (toneStringArray.includes(key)) {
@@ -206,7 +206,7 @@ export class GuitarChord {
         nextResult.add(JSON.stringify(item))
       }
     })
-    return [...nextResult].map(item => JSON.parse(item))
+    return [...nextResult].map(item => JSON.parse(item as string))
   }
 
   // 和弦指法计算入口

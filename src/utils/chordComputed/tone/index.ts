@@ -1,5 +1,5 @@
 import { is } from '../../tools/index'
-import { PositionType } from './type/index'
+import { PositionType } from '../../../types/index'
 
 // 生成一个单音，此音的映射查询与音高的改变，同时可标记记录其在吉他上的位置
 export class Tone {
@@ -80,7 +80,7 @@ export class Tone {
         toneString = (octave < 0 ? octaveString : '') + nextKey + (octave > 0 ? octaveString : '')
         return new Tone(toneString, this.position.string, this.position.fret + num)
       } else {
-        return nextKey.map(key => {
+        return (nextKey as any).map(key => {
           return new Tone((octave < 0 ? octaveString : '') + key + (octave > 0 ? octaveString : ''), this.position.string, this.position.fret + num)
         })
       }

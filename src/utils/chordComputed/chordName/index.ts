@@ -88,7 +88,7 @@ export class ChordName {
     return this.isAugmentedChord(chordTone) && this.isMinorThird(chordTone[2], chordTone[3])
   }
 
-  private getKeyName(key: string): string {
+  public getKeyName(key: string): string {
     let keyName = this.toneUtil.intervalMap[this.toneUtil.findKeyIndex(key)]
     if (Array.isArray(keyName)) {
       keyName = /b/.test(key) ? keyName[1] : keyName[0]
