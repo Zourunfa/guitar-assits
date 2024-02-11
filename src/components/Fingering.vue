@@ -19,6 +19,7 @@ import { ref, onMounted } from 'vue'
 // @ts-ignore
 import { ChordName } from '../utils/chordComputed'
 import { arraysAreEqual, uniqueArray } from '../utils/tools'
+import { cloneDeep } from 'lodash'
 const INITIAL_CHORDS: string[] = ['E4', 'B3', 'G3', 'D3', 'A2', 'E2']
 const chordNotes = ref<string[]>(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
 const currentNote = ref<string>('')
@@ -40,7 +41,7 @@ const guitarNotes: string[][] = [
 // 重置面板
 const resetFinger = () => {
   currentNote.value = ''
-  chordNotes.value = INITIAL_CHORDS
+  chordNotes.value = cloneDeep(INITIAL_CHORDS)
   chordTone.value = []
   chordNameList.value = []
   const circles = document.querySelectorAll('circle')
@@ -101,6 +102,8 @@ const distinctNotesWithNames = (notes: string[]): string[] => {
 }
 
 const generateChordName = (): void => {
+  // debugger
+
   if (arraysAreEqual(chordNotes.value, INITIAL_CHORDS)) {
     chordNameList.value = []
     return
