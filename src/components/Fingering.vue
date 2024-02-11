@@ -18,7 +18,7 @@
 import { ref, onMounted } from 'vue'
 // @ts-ignore
 import { ChordName } from '../utils/chordComputed'
-import { arraysAreEqual, uniqueArray } from '../utils/tools'
+import { arraysAreEqual, uniqueArray, sortChordArray } from '../utils/tools'
 import { cloneDeep } from 'lodash'
 const INITIAL_CHORDS: string[] = ['E4', 'B3', 'G3', 'D3', 'A2', 'E2']
 const chordNotes = ref<string[]>(['E4', 'B3', 'G3', 'D3', 'A2', 'E2'])
@@ -118,6 +118,8 @@ const generateChordName = (): void => {
 
   // 去重
   chordNameList.value = uniqueArray(chordNameList.value)
+
+  chordNameList.value = sortChordArray(chordNameList.value)
 }
 
 // 每一根琴弦只能有一个手指
