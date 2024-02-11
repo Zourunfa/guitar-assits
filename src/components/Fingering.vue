@@ -259,6 +259,9 @@ onMounted(() => {
 </script>
 
 <style>
+.finger-panel {
+  cursor: pointer;
+}
 .panel-title {
   margin-top: 5%;
 }
