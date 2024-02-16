@@ -2,6 +2,8 @@
 
 (Under design, not yet perfected)
 
+release version 1.0.1
+
 https://zourunfa.github.io/guitar-elf/
 
 to learing guitar base theory with coding
