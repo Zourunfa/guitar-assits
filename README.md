@@ -4,7 +4,7 @@
 
 ## latest release version 1.0.1
 网页版:   https://zourunfa.github.io/guitar-elf/
-windows版本(tauri打包): <a href="/Zourunfa/guitar-assits/releases/download/1.0.1/guitar-assits_0.0.0_x64_en-US.msi" rel="nofollow" data-turbo="false" data-view-component="true" class="Truncate">
+windows版本(tauri打包): <a href="/Zourunfa/guitar-assits/releases/latest/guitar-assits_0.0.0_x64_en-US.msi" rel="nofollow" data-turbo="false" data-view-component="true" class="Truncate">
     <span data-view-component="true" class="Truncate-text text-bold">guitar-assits_0.0.0_x64_en-US.msi</span>
     <span data-view-component="true" class="Truncate-text"></span>
 </a>
