@@ -22,6 +22,9 @@ devDependencies:
   '@tauri-apps/cli':
     specifier: ^1.5.0
     version: 1.5.2
+  '@types/lodash':
+    specifier: ^4.14.202
+    version: 4.14.202
   '@vitejs/plugin-vue':
     specifier: ^4.2.3
     version: 4.4.0(vite@4.4.11)(vue@3.3.4)
@@ -466,12 +469,11 @@ packages:
   /@types/lodash-es@4.17.10:
     resolution: {integrity: sha512-YJP+w/2khSBwbUSFdGsSqmDvmnN3cCKoPOL7Zjle6s30ZtemkkqhjVfFqGwPN7ASil5VyjE2GtyU/yqYY6mC0A==}
     dependencies:
-      '@types/lodash': 4.14.200
+      '@types/lodash': 4.14.202
     dev: false
 
-  /@types/lodash@4.14.200:
-    resolution: {integrity: sha512-YI/M/4HRImtNf3pJgbF+W6FrXovqj+T+/HpENLTooK9PnkacBsDpeP3IpHab40CClUfhNmdM2WTNP2sa2dni5Q==}
-    dev: false
+  /@types/lodash@4.14.202:
+    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
 
   /@types/q@1.5.7:
     resolution: {integrity: sha512-HBPgtzp44867rkL+IzQ3560/E/BlobwCjeXsuKqogrcE99SKgZR4tvBBCuNJZMhUFMz26M7cjKWZg785lllwpA==}
@@ -893,7 +895,7 @@ packages:
       '@element-plus/icons-vue': 2.1.0(vue@3.3.4)
       '@floating-ui/dom': 1.5.3
       '@popperjs/core': /@sxzz/popperjs-es@2.11.7
-      '@types/lodash': 4.14.200
+      '@types/lodash': 4.14.202
       '@types/lodash-es': 4.17.10
       '@vueuse/core': 9.13.0(vue@3.3.4)
       async-validator: 4.2.5
