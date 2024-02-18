@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from 'vue'
 import { NormalObject, StateInterface } from '../types/index'
-
+// commit
 const keyMap: string[] = ['1', '#1', 'b2', '2', '#2', 'b3', '3', '4', '#4', 'b5', '5', '#5', 'b6', '6', '#6', 'b7', '7']
 const emits = defineEmits(['drawChord'])
 
