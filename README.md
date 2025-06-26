@@ -1,5 +1,5 @@
 # guitar-assits
-
+https://deepwiki.com/Zourunfa/guitar-assits
 (Under design, not yet perfected)
 
 ## latest release version 1.1.1
